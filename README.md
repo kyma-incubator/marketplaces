@@ -1,2 +1,5 @@
-# marketplaces
-Kyma configuration for cloud marketplaces
+# Kyma Marketplaces
+
+## Overview
+
+This repository contains Kyma configuration for Cloud Marketplaces such as Google Cloud Marketplace.
