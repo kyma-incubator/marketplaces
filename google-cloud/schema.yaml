@@ -1,0 +1,46 @@
+application_api_version: v1beta1
+properties:
+  APPLICATION_NAME:
+    type: string
+    x-google-marketplace:
+      type: NAME
+  NAMESPACE:
+    type: string
+    x-google-marketplace:
+      type: NAMESPACE
+  KYMA_INITIALIZER_IMAGE:
+    type: string
+    default: $KYMA_INITIALIZER_IMAGE
+    x-google-marketplace:
+      type: IMAGE
+  SERVICE_ACCOUNT:
+    type: string
+    title: Cluster Admin Service Account
+    description: >-
+      Name of a service account in the target namespace that
+      has cluster-admin permissions. This is needed for the operator
+      to create Spark CRD and jobs.
+    x-google-marketplace:
+      type: SERVICE_ACCOUNT
+      serviceAccount:
+        roles:
+        - type: ClusterRole
+          rulesType: PREDEFINED
+          rulesFromRoleName: cluster-admin
+
+required:
+- APPLICATION_NAME
+- NAMESPACE
+- SERVICE_ACCOUNT
+- KYMA_INITIALIZER_IMAGE
+
+x-google-marketplace:
+  clusterConstraints:
+    resources:
+      - replicas: 3
+        requests:
+          cpu: 6
+          memory: 13Gi
+        affinity:
+          simpleNodeAffinity:
+            type: REQUIRE_ONE_NODE_PER_REPLICA
