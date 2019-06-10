@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 set -e
-set -u
 
 readonly SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 readonly REPOSITORY_DIR="$( cd "${SCRIPT_DIR}/../" && pwd )"
