@@ -10,8 +10,5 @@
 # All .md files
 *.md @bszwarc @kazydek @klaudiagrz @mmitoraj @tomekpapiernik
 
-# Application CR
-/google-cloud/manifest/application.yaml @aerfio @magicmatatjahu @michal-hudy @m00g3n @bszwarc @kazydek @klaudiagrz @mmitoraj @tomekpapiernik
-
 # The documentation directory
 /docs/ @bszwarc @kazydek @klaudiagrz @mmitoraj @tomekpapiernik
