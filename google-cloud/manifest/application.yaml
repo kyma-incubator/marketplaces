@@ -29,7 +29,7 @@ spec:
       # Access Kyma cluster:
       To access your Kyma cluster, you need to import Kyma self-signed certificate to your trusted certificate authorities.
       
-      # MacOS
+      ## MacOS
       To do this on MacOS, paste this command in the command line, copy the certificate string, and run the command:
       ```bash
       tmpfile=$(mktemp /tmp/temp-cert.XXXXXX) \
@@ -38,7 +38,7 @@ spec:
           && rm $tmpfile
       ```
 
-      # Windows
+      ## Windows
       To do this on Windows, paste this command in the command line, copy the certificate string, and run the command as Administrator:
       ```
       powershell "$(Get-Clipboard | Out-File -FilePath kyma.cer | Out-Host;$?) -and $(certutil -f -addstore Root kyma.cer | Out-Host;$?) -and $(Remove-Item -path kyma.cer | Out-Host;$?)"
