@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+set -u
 
 updateStatus() {
     local PHASE=${1}

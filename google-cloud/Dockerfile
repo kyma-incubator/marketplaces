@@ -12,9 +12,8 @@ ADD schema.yaml /data/
 RUN cat /data/schema.yaml \
     | env -i "KYMA_INITIALIZER_IMAGE=$KYMA_INITIALIZER_IMAGE" envsubst \
     > /data/schema.yaml.new \
-    && mv /data/schema.yaml.new /data/schema.yaml
-
-RUN cat /data/application.yaml \
+    && mv /data/schema.yaml.new /data/schema.yaml \
+    && cat /data/manifest/application.yaml \
     | env -i "VERSION=$DEPLOYER_VERSION" envsubst \
-    > /data/application.yaml.new \
-    && mv /data/application.yaml.new /data/application.yaml
+    > /data/manifest/application.yaml.new \
+    && mv /data/manifest/application.yaml.new /data/manifest/application.yaml
