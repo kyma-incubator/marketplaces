@@ -21,21 +21,27 @@ spec:
       - name: Kyma Community
         url: https://kyma-project.io/
     links:
-      - description: "Kyma Website"
+      - description: "Kyma website"
         url: https://kyma-project.io/
-      - description: "Kyma Source Code"
+      - description: "Kyma source code"
         url: https://github.com/kyma-project
     notes: |-
-      # Accessing Kyma cluster:
-      To access your kyma cluster, you need to import Kyma self signed certificate to your trusted certificate authorities.
+      ### Access Kyma cluster:
+      To access your Kyma cluster, you need to import Kyma self-signed certificate to your trusted certificate authorities.
       
-      ## MacOS
-      To do this in MacOS, copy the certificate string to clipboard and run:
+      #### MacOS
+      To do this on MacOS, paste this command in the command line, copy the certificate string, and run the command:
       ```bash
       tmpfile=$(mktemp /tmp/temp-cert.XXXXXX) \
-      && pbpaste > $tmpfile \
-      && sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain $tmpfile \
-      && rm $tmpfile
+          && pbpaste > $tmpfile \
+          && sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain $tmpfile \
+          && rm $tmpfile
+      ```
+
+      #### Windows
+      To do this on Windows, paste this command in the command line, copy the certificate string, and run the command as an Administrator:
+      ```
+      powershell "$(Get-Clipboard | Out-File -FilePath kyma.cer | Out-Host;$?) -and $(certutil -f -addstore Root kyma.cer | Out-Host;$?) -and $(Remove-Item -path kyma.cer | Out-Host;$?)"
       ```
   info:
     - name: Address
