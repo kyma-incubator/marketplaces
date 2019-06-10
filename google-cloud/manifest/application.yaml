@@ -39,7 +39,7 @@ spec:
       ```
 
       #### Windows
-      To do this on Windows, paste this command in the command line, copy the certificate string, and run the command as Administrator:
+      To do this on Windows, paste this command in the command line, copy the certificate string, and run the command as an Administrator:
       ```
       powershell "$(Get-Clipboard | Out-File -FilePath kyma.cer | Out-Host;$?) -and $(certutil -f -addstore Root kyma.cer | Out-Host;$?) -and $(Remove-Item -path kyma.cer | Out-Host;$?)"
       ```
