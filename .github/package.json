@@ -5,10 +5,10 @@
     "license": "Apache-2.0",
     "repository": {
       "type": "git",
-      "url": "https://github.com/kyma-project/kyma"
+      "url": "https://github.com/kyma-incubator/marketplaces"
     },
     "changelog": {
-      "repo": "kyma-project/kyma",
+      "repo": "kyma-incubator/marketplaces",
       "labels": {
         "area/application-connector": "Application Connector",
         "area/serverless": "Serverless",
