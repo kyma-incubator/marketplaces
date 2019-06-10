@@ -13,10 +13,10 @@ updateStatus() {
         --type=merge \
         --patch="{\"spec\":{\"assemblyPhase\":\"${PHASE}\",
             \"info\":[
-            {\"name\":\"Address\",\"type\":\"Reference\",\"valueFrom\":{\"type\":\"ConfigMapKeyRef\",\"configMapKeyRef\":{\"name\":\"${APPLICATION_NAME}-kyma\",\"key\":\"address\"}}},
-            {\"name\":\"Email\",\"type\":\"Reference\",\"valueFrom\":{\"type\":\"ConfigMapKeyRef\",\"configMapKeyRef\":{\"name\":\"${APPLICATION_NAME}-kyma\",\"key\":\"email\"}}},
-            {\"name\":\"Certificate\",\"type\":\"Reference\",\"valueFrom\":{\"type\":\"SecretKeyRef\",\"secretKeyRef\":{\"name\":\"${APPLICATION_NAME}-kyma\",\"key\":\"certificate\"}}},
-            {\"name\":\"Password\",\"type\":\"Reference\",\"valueFrom\":{\"type\":\"SecretKeyRef\",\"secretKeyRef\":{\"name\":\"${APPLICATION_NAME}-kyma\",\"key\":\"password\"}}},
+            {\"name\":\"Address\",\"type\":\"Reference\",\"valueFrom\":{\"type\":\"ConfigMapKeyRef\",\"configMapKeyRef\":{\"name\":\"${APPLICATION_NAME}\",\"key\":\"address\"}}},
+            {\"name\":\"Email\",\"type\":\"Reference\",\"valueFrom\":{\"type\":\"ConfigMapKeyRef\",\"configMapKeyRef\":{\"name\":\"${APPLICATION_NAME}\",\"key\":\"email\"}}},
+            {\"name\":\"Certificate\",\"type\":\"Reference\",\"valueFrom\":{\"type\":\"SecretKeyRef\",\"secretKeyRef\":{\"name\":\"${APPLICATION_NAME}\",\"key\":\"certificate\"}}},
+            {\"name\":\"Password\",\"type\":\"Reference\",\"valueFrom\":{\"type\":\"SecretKeyRef\",\"secretKeyRef\":{\"name\":\"${APPLICATION_NAME}\",\"key\":\"password\"}}},
             {\"name\":\"Installation\",\"value\":\"${MESSAGE}\"}
             ]}}"
 }
@@ -37,7 +37,7 @@ updateAccessInfo() {
 apiVersion: v1
 kind: Secret
 metadata:
-  name: ${APPLICATION_NAME}-kyma
+  name: ${APPLICATION_NAME}
   namespace: ${NAMESPACE}
   labels:
     app.kubernetes.io/name: ${APPLICATION_NAME}
@@ -49,7 +49,7 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: ${APPLICATION_NAME}-kyma
+  name: ${APPLICATION_NAME}
   namespace: ${NAMESPACE}
   labels:
     app.kubernetes.io/name: ${APPLICATION_NAME}
