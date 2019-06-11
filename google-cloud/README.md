@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project provides Kyma configuration for Google Cloud Marketplace.
+This project provides Kyma configuration for the Google Cloud Marketplace.
 
 ## Prerequisites
 
@@ -14,36 +14,36 @@ Use the following tools to set up the project:
 
 ## Usage
 
-### Install application on cluster manually
+### Install the application manually
 
-To install application manually on Google Kubernetes Engine cluster, follow these steps:
-1. Export variables
+To install the application manually on a Google Kubernetes Engine cluster, follow these steps:
+1. Export variables:
     ```bash
     export GCP_PROJECT={GCP project}
     export GCP_CLUSTER_NAME={GKE cluster name}
     export KYMA_INITIALIZER_IMAGE={Kyma Initializer image}
     ```
-2. Create cluster
+2. Create a cluster:
     ```bash
     make cluster-create
     ```
-3. Install resources
+3. Install resources:
     ```bash
     make install
     ```
-4. Open displayed link that points to Applications view in Google Cloud Project
+4. Open the displayed link that points to the **Applications** view in the Google Cloud Project.
 
-## Access build artifacts
+### Access build artifacts
 
- - To access build artifacts from Pull Request job, use following template:
+ - To access build artifacts from a presubmit job, use following template:
     ```
     https://storage.googleapis.com/kyma-prow-logs/pr-logs/pull/kyma-incubator_marketplaces/{PR_NUMBER}/pre-marketplaces/{JOB_ID}/artifacts/google-cloud-manifest.yaml
     ```
-- To access build artifacts from Merge job, use following template:
+- To access build artifacts from a postsubmit job, use following template:
     ```
     https://storage.googleapis.com/kyma-prow-logs/logs/post-marketplaces/{JOB_ID}/artifacts/google-cloud-manifest.yaml
     ```
-- To access build artifacts from Release job, use following template:
+- To access build artifacts from a release job, use following template:
     ```
     https://storage.googleapis.com/kyma-prow-logs/logs/rel-marketplaces/{JOB_ID}/artifacts/google-cloud-manifest.yaml
     ```
