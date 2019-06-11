@@ -2,7 +2,7 @@
 
 ## Overview
 
-Kyma Initializer is responsible for initializing Kyma installation inside Kubernetes cluster.
+Kyma Initializer initiates Kyma installation inside a Kubernetes cluster.
 
 ## Prerequisites
 
