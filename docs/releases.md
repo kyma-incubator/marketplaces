@@ -20,7 +20,7 @@ Follow these steps to create a new Marketplace release:
     git checkout master
     git pull
     ```
-2. Create a release branch.
+2. Create a release branch:
    ```
    git checkout -b release-1.1
    git push origin release-1.1
