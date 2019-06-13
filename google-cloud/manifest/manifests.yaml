@@ -29,10 +29,3 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        resources:
-          requests:
-            memory: 10Mi
-            cpu: 80m
-          limits:
-            memory: 20Mi
-            cpu: 160m
