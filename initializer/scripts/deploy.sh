@@ -55,7 +55,7 @@ metadata:
   labels:
     app.kubernetes.io/name: ${APPLICATION_NAME}
 data:
-  address: "${DOMAIN}"
+  address: "https://${DOMAIN}"
   email: "${EMAIL}"
 EOF
 }
@@ -63,7 +63,7 @@ EOF
 validateEnvironment() {
     local discoverUnsetVar=false
 
-    for var in APPLICATION_NAME NAMESPACE TILLER_RESOURCE KYMA_INSTALLER_RESOURCE KYMA_CONFIG_RESOURCE; do
+    for var in APPLICATION_NAME NAMESPACE TILLER_RESOURCE KYMA_INSTALLER_RESOURCE; do
         if [ -z "${!var}" ] ; then
             echo "ERROR: $var is not set"
             discoverUnsetVar=true
@@ -82,13 +82,9 @@ main() {
     kubectl apply -f "${TILLER_RESOURCE}"
 
     updateStatus "Pending" "Installing Kyma installator"
-    cat "${KYMA_INSTALLER_RESOURCE}" <(echo -e "\n---") "${KYMA_CONFIG_RESOURCE}" \
-        | sed -e "s/__PROMTAIL_CONFIG_NAME__/promtail-k8s-1-14.yaml/g" \
-        | sed -e "s/__.*__//g" \
-        | kubectl apply -f -
+    kubectl apply -f "${KYMA_INSTALLER_RESOURCE}"
 
     updateStatus "Pending" "Starting Kyma instalation"
-    kubectl label installation/kyma-installation action=install
 
     STATUS=Start
 
