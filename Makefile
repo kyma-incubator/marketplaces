@@ -1,8 +1,3 @@
-authenticate:
-	gcloud config set project kyma-project
-	gcloud auth configure-docker
-	gcloud config configurations list
-
 master-build: authenticate
 	make -C initializer/ ci-master
 	make -C google-cloud/ ci-master
