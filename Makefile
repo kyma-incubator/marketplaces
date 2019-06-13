@@ -1,4 +1,5 @@
 authenticate:
+	gcloud config set project kyma-project
 	gcloud auth configure-docker
 	gcloud config configurations list
 
