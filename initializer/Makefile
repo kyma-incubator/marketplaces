@@ -1,5 +1,5 @@
 IMAGE_NAME ?= kyma-initializer
-DOCKER_PUSH_REPOSITORY ?= eu.gcr.io/kyma-project/marketplaces
+DOCKER_PUSH_REPOSITORY ?= gcr.io/kyma-project
 DOCKER_TAG ?= latest
 IMAGE = $(DOCKER_PUSH_REPOSITORY)$(DOCKER_PUSH_DIRECTORY)/$(IMAGE_NAME):$(DOCKER_TAG)
 
