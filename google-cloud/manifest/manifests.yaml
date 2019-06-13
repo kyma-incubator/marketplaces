@@ -21,7 +21,7 @@ spec:
       containers:
       - name: initializer
         image: $KYMA_INITIALIZER_IMAGE
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         env:
         - name: APPLICATION_NAME
           value: $APPLICATION_NAME
@@ -29,3 +29,10 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
+        resources:
+          requests:
+            memory: 10Mi
+            cpu: 80m
+          limits:
+            memory: 20Mi
+            cpu: 160m

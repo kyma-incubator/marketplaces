@@ -1,19 +1,28 @@
 IMAGE_NAME ?= kyma-gcp-marketplace
 DOCKER_PUSH_REPOSITORY ?= gcr.io/kyma-project
 DOCKER_TAG ?= latest
+DOCKER_TAG_MINOR = $(shell echo "$(DOCKER_TAG)" | grep -o  '[0-9]\+\.[0-9]\+')
 IMAGE = $(DOCKER_PUSH_REPOSITORY)$(DOCKER_PUSH_DIRECTORY)/$(IMAGE_NAME):$(DOCKER_TAG)
+IMAGE_MINOR = $(DOCKER_PUSH_REPOSITORY)$(DOCKER_PUSH_DIRECTORY)/$(IMAGE_NAME):$(DOCKER_TAG_MINOR)
 ARTIFACTS ?= out
 GCP_ZONE ?= europe-west3-a
 NAMESPACE ?= default
 APPLICATION_NAME ?= kyma
 SERVICE_ACCOUNT ?= kyma-serviceaccount
+ifneq (,$(findstring -,$(DOCKER_TAG)))
 KYMA_INITIALIZER_IMAGE ?= $(DOCKER_PUSH_REPOSITORY)$(DOCKER_PUSH_DIRECTORY)/kyma-gcp-marketplace/kyma-initializer:$(DOCKER_TAG)
+else
+KYMA_INITIALIZER_IMAGE ?= $(DOCKER_PUSH_REPOSITORY)$(DOCKER_PUSH_DIRECTORY)/kyma-gcp-marketplace/kyma-initializer:$(DOCKER_TAG_MINOR)
+endif
 VERSION ?= $(DOCKER_TAG)
 
 KYMA_VERSION = $(shell cat ../KYMA_VERSION)
 
 .EXPORT_ALL_VARIABLES:
 .PHONY: ci-pr ci-master ci-release image-build image-push cluster-create cluster-attach cluster-service-account install manifest-build check-env
+
+dupa:
+	@echo "$(KYMA_INITIALIZER_IMAGE)"
 
 cluster-create: check-env
 	gcloud container --project "$(GCP_PROJECT)" clusters \
@@ -49,6 +58,10 @@ image-build:
 
 image-push: image-build
 	docker push $(IMAGE)
+ifeq (,$(findstring -,$(DOCKER_TAG)))
+	docker tag $(IMAGE) $(IMAGE_MINOR)
+	docker push $(IMAGE_MINOR)
+endif
 
 ci-master: manifest-build image-push
 ci-pr: ci-master
