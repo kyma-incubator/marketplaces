@@ -3,8 +3,8 @@ DOCKER_PUSH_REPOSITORY ?= gcr.io/kyma-project
 DOCKER_TAG ?= latest
 DOCKER_TAG_MINOR = $(shell echo "$(DOCKER_TAG)" | grep -o  '[0-9]\+\.[0-9]\+')
 IMAGE = $(DOCKER_PUSH_REPOSITORY)$(DOCKER_PUSH_DIRECTORY)/$(IMAGE_NAME):$(DOCKER_TAG)
-IMAGE_GCP = $(DOCKER_PUSH_REPOSITORY)$(DOCKER_PUSH_DIRECTORY)/kyma-gcp-marketplace/$(IMAGE_NAME):$(DOCKER_TAG) # It is required by GCP Marketplace, when changed update google-cloud/Makefile
-IMAGE_GCP_MINOR = $(DOCKER_PUSH_REPOSITORY)$(DOCKER_PUSH_DIRECTORY)/kyma-gcp-marketplace/$(IMAGE_NAME):$(DOCKER_TAG_MINOR) # It is required by GCP Marketplace, when changed update google-cloud/Makefile
+IMAGE_GCP = $(DOCKER_PUSH_REPOSITORY)$(DOCKER_PUSH_DIRECTORY)/kyma-gcp-marketplace:$(DOCKER_TAG) # It is required by GCP Marketplace, when changed update google-cloud/Makefile
+IMAGE_GCP_MINOR = $(DOCKER_PUSH_REPOSITORY)$(DOCKER_PUSH_DIRECTORY)/kyma-gcp-marketplace:$(DOCKER_TAG_MINOR) # It is required by GCP Marketplace, when changed update google-cloud/Makefile
 
 KYMA_VERSION = $(shell cat ../KYMA_VERSION)
 
