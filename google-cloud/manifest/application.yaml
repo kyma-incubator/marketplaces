@@ -26,7 +26,7 @@ spec:
       - description: "Kyma source code"
         url: https://github.com/kyma-project
     notes: |-
-      To access your Kyma cluster, import Kyma self-signed certificate to your trusted certificate authorities.
+      To access your Kyma cluster, import the Kyma self-signed certificate to your trusted certificate authorities.
       
       ### MacOS
       Paste this command in the command line, copy the certificate string, and run the command:
