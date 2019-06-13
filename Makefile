@@ -1,5 +1,6 @@
 authenticate:
 	gcloud auth configure-docker
+	gcloud config configurations list
 
 master-build: authenticate
 	make -C initializer/ ci-master
