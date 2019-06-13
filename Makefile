@@ -1,12 +1,15 @@
-master-build:
+authenticate:
+	gcloud auth configure-docker
+
+master-build: authenticate
 	make -C initializer/ ci-master
 	make -C google-cloud/ ci-master
 
-pr-build:
+pr-build: authenticate
 	make -C initializer/ ci-pr
 	make -C google-cloud/ ci-pr
 
-release:
+release: authenticate
 	make -C initializer/ ci-release
 	make -C google-cloud/ ci-release
 	exec scripts/release.sh
