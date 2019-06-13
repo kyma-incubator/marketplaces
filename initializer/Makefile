@@ -17,7 +17,7 @@ image-build:
 image-push: image-build
 	docker push $(IMAGE)
 	docker push $(IMAGE_GCP)
-ifeq (,$(findstring -,$(DOCKER_TAG)))
+ifneq (,$(shell echo "$(DOCKER_TAG)" | grep '[0-9]\+\.[0-9]\+\.[0-9]\+$$'))
 	docker tag $(IMAGE_GCP) $(IMAGE_GCP_MINOR)
 	docker push $(IMAGE_GCP_MINOR)
 endif
