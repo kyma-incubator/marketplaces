@@ -1,5 +1,5 @@
-IMAGE_NAME ?= kyma-gc-deployer
-DOCKER_PUSH_REPOSITORY ?= eu.gcr.io/kyma-project/marketplaces
+IMAGE_NAME ?= kyma-gcp-marketplace
+DOCKER_PUSH_REPOSITORY ?= gcr.io/kyma-project
 DOCKER_TAG ?= latest
 IMAGE = $(DOCKER_PUSH_REPOSITORY)$(DOCKER_PUSH_DIRECTORY)/$(IMAGE_NAME):$(DOCKER_TAG)
 ARTIFACTS ?= out

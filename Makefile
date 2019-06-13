@@ -1,3 +1,5 @@
+.PHONY: ci-pr ci-master ci-release master-build pr-build release
+
 master-build:
 	make -C initializer/ ci-master
 	make -C google-cloud/ ci-master
