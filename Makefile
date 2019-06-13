@@ -1,12 +1,14 @@
-master-build: authenticate
+.PHONY: ci-pr ci-master ci-release master-build pr-build release
+
+master-build:
 	make -C initializer/ ci-master
 	make -C google-cloud/ ci-master
 
-pr-build: authenticate
+pr-build:
 	make -C initializer/ ci-pr
 	make -C google-cloud/ ci-pr
 
-release: authenticate
+release:
 	make -C initializer/ ci-release
 	make -C google-cloud/ ci-release
 	exec scripts/release.sh
