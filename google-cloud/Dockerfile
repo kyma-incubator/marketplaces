@@ -14,6 +14,6 @@ RUN cat /data/schema.yaml \
     > /data/schema.yaml.new \
     && mv /data/schema.yaml.new /data/schema.yaml \
     && cat /data/manifest/application.yaml \
-    | env -i "VERSION=$DEPLOYER_VERSION" envsubst \
+    | sed "s/\$VERSION/${DEPLOYER_VERSION}/g" \
     > /data/manifest/application.yaml.new \
     && mv /data/manifest/application.yaml.new /data/manifest/application.yaml
