@@ -104,7 +104,7 @@ main() {
     EMAIL=$(kubectl get secret admin-user -n kyma-system -o jsonpath="{.data.email}" | base64 -d)
 
     updateAccessInfo "${DOMAIN}" "${CERT}" "${PASSWORD}" "${EMAIL}"
-    updateStatus "Success" "Installed. Thank you for using Kyma."
+    updateStatus "Succeeded" "Installed. Thank you for using Kyma."
 }
 
 main

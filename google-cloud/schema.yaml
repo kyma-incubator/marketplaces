@@ -39,7 +39,7 @@ x-google-marketplace:
     resources:
       - replicas: 3
         requests:
-          cpu: 6
+          cpu: 4
           memory: 13Gi
         affinity:
           simpleNodeAffinity:

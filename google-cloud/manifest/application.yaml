@@ -75,8 +75,6 @@ spec:
       value: Triggered
   componentKinds:
     - group: v1
-      kind: Pod
-    - group: v1
       kind: Job
     - group: v1
       kind: Secret
