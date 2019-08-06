@@ -27,9 +27,14 @@ spec:
         url: https://github.com/kyma-project
     notes: |-
       To access your Kyma cluster, import the Kyma self-signed certificate to your trusted certificate authorities.
-      
+
       ### MacOS
-      Paste this command in the command line, copy the certificate string, and run the command:
+
+      Follow these steps:
+
+      1. Open the Terminal.
+      2. Paste this command:
+
       ```bash
       tmpfile=$(mktemp /tmp/temp-cert.XXXXXX) \
           && pbpaste > $tmpfile \
@@ -37,11 +42,23 @@ spec:
           && rm $tmpfile
       ```
 
+      3. Copy the certificate string to clipboard.
+      4. Execute the command from Step 2.
+
       ### Windows
-      Paste this command in the command line, copy the certificate string, and run the command as an Administrator:
+
+      Follow these steps:
+
+      1. Run the Command Prompt as administrator.
+      2. Paste this command:
+
       ```
       powershell "$(Get-Clipboard | Out-File -FilePath kyma.cer | Out-Host;$?) -and $(certutil -f -addstore Root kyma.cer | Out-Host;$?) -and $(Remove-Item -path kyma.cer | Out-Host;$?)"
       ```
+
+      3. Copy the certificate string to clipboard.
+      4. Execute the command from Step 2.
+
   info:
     - name: Address
       type: Reference
