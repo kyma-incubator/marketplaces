@@ -30,7 +30,7 @@ spec:
 
       ### MacOS
 
-      Copy the following command and paste it into your terminal:
+      Copy the following command and paste it into your terminal window:
 
       ```bash
       tmpfile=$(mktemp /tmp/temp-cert.XXXXXX) \
@@ -41,11 +41,11 @@ spec:
 
       On the GCP website, click **preview secret data** next to the **Certificate** details, and copy the certificate string.
       
-      Run the command you previously pasted into your terminal.
+      Run the command you previously pasted into your terminal window.
 
       ### Windows
 
-      Run the Command Prompt as an Administrator. Copy the following command and paste it into your Command Prompt:
+      Run the Command Prompt as an Administrator. Copy the following command and paste it into your Command Prompt window:
 
       ```
       powershell "$(Get-Clipboard | Out-File -FilePath kyma.cer | Out-Host;$?) -and $(certutil -f -addstore Root kyma.cer | Out-Host;$?) -and $(Remove-Item -path kyma.cer | Out-Host;$?)"
@@ -53,7 +53,7 @@ spec:
 
       On the GCP website, click **preview secret data** next to the **Certificate** details, and copy the certificate string.
 
-      Run the command you previously pasted into your Command Prompt.
+      Run the command you previously pasted into your Command Prompt window.
 
   info:
     - name: Address
