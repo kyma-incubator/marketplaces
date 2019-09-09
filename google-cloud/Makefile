@@ -24,7 +24,7 @@ KYMA_VERSION = $(shell cat ../KYMA_VERSION)
 cluster-create: check-env
 	gcloud container --project "$(GCP_PROJECT)" clusters \
 	create "$(GCP_CLUSTER_NAME)" --zone "$(GCP_ZONE)" \
-	--cluster-version "1.12" --machine-type "n1-standard-4" \
+	--cluster-version "1.13" --machine-type "n1-standard-4" \
 	--addons HorizontalPodAutoscaling,HttpLoadBalancing
 
 cluster-attach: check-env
