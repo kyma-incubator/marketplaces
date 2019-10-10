@@ -43,6 +43,68 @@ spec:
       
       Run the command you previously pasted into your terminal window.
 
+      #### Linux
+      
+      1. Copy certificate from `Application details` than save it locally and export it’s path as environmental variable e.g.:
+      
+      ```
+      export KYMA_CERT=/tmp/kyma.crt
+      ```
+      
+      1. On `Debian` base distro:
+      
+          1.1. Check if `ca-certificates` package is installed:
+      
+          ```
+          apt list ca-certificates
+          ```
+      
+          if package is not listed install it:
+      
+          ```
+          sudo apt install ca-certificates
+          ```
+      
+          1.2. Copy kyma certificate and update list of certificates:
+      
+          ```
+          sudo sh -c "cp ${KYMA_CERT} /usr/local/share/ca-certificates/kyma.crt && \   
+                      update-ca-certificates --fresh && rm -i ${KYMA_CERT}"
+          ```
+          
+      2. On Arch base distro:
+      
+          ```
+          sudo sh -c "cp ${KYMA_CERT} /etc/ca-certificates/trust-source/anchors && \
+                      trust extract-compat && rm -i ${KYMA_CERT}"
+          ```
+      3. On Centos6:
+      
+          1.1. Check if `ca-certificates` package is installed:
+      
+          ```
+          yum list installed ca-certificates
+          ```
+      
+          if package is not listed install it:
+      
+          ```
+          yum install ca-certificates
+          ```
+      
+          1.2. Enable dynamic 
+      
+          ```
+          sudo sh -c "cp ${KYMA_CERT} /etc/pki/ca-trust/source/anchors/ && \
+                      update-ca-trust extract && rm -i ${KYMA_CERT}"
+          ``` 
+      
+      4. On Centos5:
+      
+          ```
+          sudo sh -c "cat ${KYMA_CERT} >>/etc/pki/tls/certs/ca-bundle.crt"
+          ```
+      
       ### Windows
 
       Run the Command Prompt as an Administrator. Copy the following command and paste it into your Command Prompt window:
