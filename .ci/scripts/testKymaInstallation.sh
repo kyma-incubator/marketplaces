@@ -22,32 +22,6 @@ function installDefaultResources() {
     kubectl apply -f "${ROOT_DIR}/resources/"
 }
 
-function startDocker() {
-    log "Docker in Docker enabled, initializing..."
-    printf '=%.0s' {1..80}; echo
-    # If we have opted in to docker in docker, start the docker daemon,
-    service docker start
-    # the service can be started but the docker socket not ready, wait for ready
-    local WAIT_N=0
-    local MAX_WAIT=20
-    while true; do
-        # docker ps -q should only work if the daemon is ready
-        docker ps -q > /dev/null 2>&1 && break
-        if [[ ${WAIT_N} -lt ${MAX_WAIT} ]]; then
-            WAIT_N=$((WAIT_N+1))
-            log "Waiting for docker to be ready, sleeping for ${WAIT_N} seconds."
-            sleep ${WAIT_N}
-        else
-            log "Reached maximum attempts, not waiting any longer..."
-            exit 1
-        fi
-    done
-    printf '=%.0s' {1..80}; echo
-
-    docker-credential-gcr configure-docker
-    log "Done setting up docker in docker."
-}
-
 function createCluster() {
     kind create cluster --config "${ROOT_DIR}/cluster.yaml" --wait 3m
     readonly KUBECONFIG="$(kind get kubeconfig-path --name="kind")"
@@ -104,11 +78,6 @@ function applyArtifacts(){
 }
 
 trap finalize EXIT
-
-#if docker info > /dev/null 2>&1 ; then
-#    log "startDocker"
-#    startDocker
-#fi
 
 log "createCluster"
 createCluster
