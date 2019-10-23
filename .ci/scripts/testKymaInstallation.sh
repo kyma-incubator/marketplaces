@@ -35,7 +35,7 @@ function finalize() {
 }
 
 function getAssemblyPhase(){
-    kubectl get Application kyma -o jsonpath="{.spec.assemblyPhase}"
+    kubectl get Application.app.k8s.io kyma -o jsonpath="{.spec.assemblyPhase}"
 }
 
 function monitorInstallation(){
