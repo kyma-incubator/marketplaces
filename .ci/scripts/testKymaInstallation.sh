@@ -1,12 +1,11 @@
 #!/bin/bash
 
-
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-CLUSTER_DIR="$( cd "${SCRIPT_DIR}/../cluster" && pwd )"
-ARTIFACTS_PATH="${ARTIFACTS:-"${SCRIPT_DIR}/out"}"
-INSTALLATIONTIMEOUT=108000 #in this case it mean 30 minutes
-CR_NAMESPACE="${NAMESPACE:-"default"}"
-SERVICE_ACCOUNT="kyma-serviceaccount"
+ROOT_DIR="$( cd "${SCRIPT_DIR}/../cluster" && pwd )"
+SERVICE_ACCOUNT="${SERVICE_ACCOUNT:-"kyma-serviceaccount"}"
+ARTIFACTS="${ARTIFACTS:-"${SCRIPT_DIR}/out"}"
+NAMESPACE="${NAMESPACE:-"default"}"
+INSTALLATIONTIMEOUT=1800 #in this case it mean 30 minutes
 
 function log() {
     echo "$(date +"%Y/%m/%d %T %Z"): ${1}"
@@ -16,8 +15,11 @@ function installDefaultResources() {
     log "Make kubernetes.io/host-path Storage Class as non default"
     kubectl annotate storageclass standard storageclass.kubernetes.io/is-default-class="false" storageclass.beta.kubernetes.io/is-default-class="false" --overwrite
 
-    log "Install default resources from ${CLUSTER_DIR}/resources/"
-    kubectl apply -f "${CLUSTER_DIR}/resources/"
+    log "Create kyma-installer namespace"
+    kubectl create namespace kyma-installer
+
+    log "Install default resources from ${ROOT_DIR}/resources/"
+    kubectl apply -f "${ROOT_DIR}/resources/"
 }
 
 function startDocker() {
@@ -47,8 +49,7 @@ function startDocker() {
 }
 
 function createCluster() {
-    log "Create kind cluster"
-    kind create cluster --config "${CLUSTER_DIR}/cluster.yaml" --wait 3m
+    kind create cluster --config "${ROOT_DIR}/cluster.yaml" --wait 3m
     readonly KUBECONFIG="$(kind get kubeconfig-path --name="kind")"
     cp "${KUBECONFIG}" "${HOME}/.kube/config"
     kubectl cluster-info
@@ -59,59 +60,55 @@ function finalize() {
     kind delete cluster
 }
 
-function kymaState(){
-    return "$(kubectl -n default get installation/kyma-installation -o jsonpath="{.status.state}")"
-}
-
-function kymaInstallationState(){
-    return "$(kubectl -n default get installation/kyma-installation -o jsonpath="Status: {.status.state}, Description: {.status.description}")"
+function getAssemblyPhase(){
+    kubectl get Application kyma -o jsonpath="{.spec.assemblyPhase}"
 }
 
 function monitorInstallation(){
-    log "Waiting for Kyma..."
-
     TIMETOWAIT=2
     TIMECOUNTER=0
-    COMPONENT=""
+    PHASE=""
+    NEWPHASE=""
 
-    while [ "$(kymaState)" != "Installed" ] ;
+    while [ "${NEWPHASE}" != "Installed" ] ;
     do
-        NEWCOMPONENT=$(kymaInstallationState)
+        NEWPHASE=$(getAssemblyPhase)
 
-        if [ "${NEWCOMPONENT}" != "${COMPONENT}" ]
+        if [ "${TIMECOUNTER}" -gt "${INSTALLATIONTIMEOUT}" ]
         then
-            log  "$(date +"%T") ${NEWCOMPONENT}";
-            if [ "${TIMECOUNTER}" -gt "${INSTALLATIONTIMEOUT}" ]
-            then
-                log "Installation timeout"
-                exit 1
-            fi
-            COMPONENT=${NEWCOMPONENT}
+            log "Installation timeout"
+            exit 1
+        fi
+
+        if [ "${PHASE}" != "${NEWPHASE}" ]
+        then
+            PHASE="${NEWPHASE}"
+            log "${PHASE}"
         fi
 
         sleep ${TIMETOWAIT};
         TIMECOUNTER=$(( TIMECOUNTER + TIMETOWAIT ))
     done
 
-    log "Kyma status: Installed"
+    log "Kyma status: ${PHASE}"
 }
 
 function createServiceAccount(){
-    kubectl create sa "${SERVICE_ACCOUNT}" --namespace "${CR_NAMESPACE}"
-	kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --serviceaccount="${CR_NAMESPACE}:${SERVICE_ACCOUNT}"
+    kubectl create sa "${SERVICE_ACCOUNT}" --namespace "${NAMESPACE}"
+	kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --serviceaccount="${NAMESPACE}:${SERVICE_ACCOUNT}"
 }
 
 function applyArtifacts(){
     kubectl apply -f "https://raw.githubusercontent.com/GoogleCloudPlatform/marketplace-k8s-app-tools/master/crd/app-crd.yaml"
-    kubectl apply -f "${ARTIFACTS_PATH}/*"
+    kubectl apply -f "${ARTIFACTS}"
 }
 
 trap finalize EXIT
 
-if docker info > /dev/null 2>&1 ; then
-    log "startDocker"
-    startDocker
-fi
+#if docker info > /dev/null 2>&1 ; then
+#    log "startDocker"
+#    startDocker
+#fi
 
 log "createCluster"
 createCluster
@@ -122,9 +119,10 @@ installDefaultResources
 log "create serviceclass ${SERVICE_ACCOUNT}"
 createServiceAccount
 
-log "apply ${ARTIFACTS_PATH}"
+log "apply artifacts"
 applyArtifacts
 
-log "monitor installation"
-sleep 10
+log "Waiting for Kyma..."
 monitorInstallation
+
+exit 0
