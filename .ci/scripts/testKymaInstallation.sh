@@ -44,7 +44,7 @@ function monitorInstallation(){
     PHASE=""
     NEWPHASE=""
 
-    while [ "${NEWPHASE}" != "Installed" ] ;
+    while [ "${NEWPHASE}" != "Succeeded" ] ;
     do
         NEWPHASE=$(getAssemblyPhase)
 
