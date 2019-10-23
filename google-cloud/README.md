@@ -17,33 +17,45 @@ Use the following tools to set up the project:
 ### Install the application manually
 
 To install the application manually on a Google Kubernetes Engine cluster, follow these steps:
+
 1. Export variables:
+
     ```bash
     export GCP_PROJECT={GCP project}
     export GCP_CLUSTER_NAME={GKE cluster name}
     export KYMA_INITIALIZER_IMAGE={Kyma Initializer image}
     ```
+
 2. Create a cluster:
+
     ```bash
     make cluster-create
     ```
+
 3. Install resources:
+
     ```bash
     make install
     ```
+
 4. Open the displayed link that points to the **Applications** view in the Google Cloud Project.
 
 ### Access build artifacts
 
- - To access build artifacts from a presubmit job, use following template:
-    ```
+* To access build artifacts from a presubmit job, use following template:
+
+    ```text
     https://storage.googleapis.com/kyma-prow-logs/pr-logs/pull/kyma-incubator_marketplaces/{PR_NUMBER}/pre-marketplaces/{JOB_ID}/artifacts/google-cloud-manifest.yaml
     ```
-- To access build artifacts from a postsubmit job, use following template:
-    ```
+
+* To access build artifacts from a postsubmit job, use following template:
+
+    ```text
     https://storage.googleapis.com/kyma-prow-logs/logs/post-marketplaces/{JOB_ID}/artifacts/google-cloud-manifest.yaml
     ```
-- To access build artifacts from a release job, use following template:
-    ```
+
+* To access build artifacts from a release job, use following template:
+
+    ```text
     https://storage.googleapis.com/kyma-prow-logs/logs/rel-marketplaces/{JOB_ID}/artifacts/google-cloud-manifest.yaml
     ```
