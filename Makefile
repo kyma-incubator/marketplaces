@@ -7,7 +7,6 @@ master-build:
 pr-build:
 	make -C initializer/ ci-pr
 	make -C google-cloud/ ci-pr
-	sh .ci/scripts/testKymaInstallator
 
 release:
 	make -C initializer/ ci-release

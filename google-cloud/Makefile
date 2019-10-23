@@ -19,7 +19,7 @@ VERSION ?= $(DOCKER_TAG)
 KYMA_VERSION = $(shell cat ../KYMA_VERSION)
 
 .EXPORT_ALL_VARIABLES:
-.PHONY: ci-pr ci-master ci-release image-build image-push cluster-create cluster-attach cluster-service-account install manifest-build check-env
+.PHONY: ci-pr ci-master ci-release image-build image-push cluster-create cluster-attach cluster-service-account install manifest-build check-env tests-run
 
 cluster-create: check-env
 	gcloud container --project "$(GCP_PROJECT)" clusters \
@@ -53,6 +53,9 @@ image-build:
 		--build-arg KYMA_INITIALIZER_IMAGE=$(KYMA_INITIALIZER_IMAGE) \
 		-t $(IMAGE) .
 
+tests-run:
+	sh ../.ci/scripts/testKymaInstallation.sh
+
 image-push: image-build
 	docker push $(IMAGE)
 ifneq (,$(shell echo "$(DOCKER_TAG)" | grep '[0-9]\+\.[0-9]\+\.[0-9]\+$$'))
@@ -61,7 +64,7 @@ ifneq (,$(shell echo "$(DOCKER_TAG)" | grep '[0-9]\+\.[0-9]\+\.[0-9]\+$$'))
 endif
 
 ci-master: manifest-build image-push
-ci-pr: ci-master
+ci-pr: ci-master tests-run
 ci-release: ci-master
 
 check-env:
