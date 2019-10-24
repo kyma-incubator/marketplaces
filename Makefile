@@ -16,6 +16,3 @@ release:
 ci-master: master-build
 ci-pr: pr-build
 ci-release: release
-
-test:
-	make -C google-cloud/ tests-run

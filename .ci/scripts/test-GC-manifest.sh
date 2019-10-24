@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -eox
 
-echo "${BASH_SOURCE[0]}"
+echo $(pwd)
 echo "$( dirname "${BASH_SOURCE[0]}" )"
 SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 ROOT_DIR="$( cd "${SCRIPTS_DIR}/../cluster" && pwd )"
