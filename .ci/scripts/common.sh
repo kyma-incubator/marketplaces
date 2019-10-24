@@ -1,7 +1,18 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -eox
+
+NAMESPACE="${NAMESPACE:-"default"}"
+SERVICE_ACCOUNT="${SERVICE_ACCOUNT:-"kyma-serviceaccount"}"
 
 function log() {
     echo "$(date +"%Y/%m/%d %T %Z"): ${1}"
+}
+
+function createCluster() {
+    kind create cluster --config "${ROOT_DIR}/cluster.yaml" --wait 3m
+    readonly KUBECONFIG="$(kind get kubeconfig-path --name="kind")"
+    cp "${KUBECONFIG}" "${HOME}/.kube/config"
+    kubectl cluster-info
 }
 
 function installDefaultResources() {
