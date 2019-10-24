@@ -54,7 +54,7 @@ image-build:
 		-t $(IMAGE) .
 
 tests-run:
-	sh ../.ci/scripts/testKymaInstallation.sh
+	sh ../.ci/scripts/test-GC-manifest.sh
 
 image-push: image-build
 	docker push $(IMAGE)
