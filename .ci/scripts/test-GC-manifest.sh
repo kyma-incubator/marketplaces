@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -eox
 
-SCRIPTS_DIR="$( cd "../.ci/scripts" && pwd )"
+SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 CI_DIR="$( cd "${SCRIPTS_DIR}/.." && pwd )"
 ARTIFACTS="${ARTIFACTS:-"${CI_DIR}/in"}"
 INSTALLATIONTIMEOUT=1800 #in this case it mean 30 minutes
