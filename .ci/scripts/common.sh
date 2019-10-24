@@ -23,8 +23,8 @@ function installDefaultResources() {
     log "Create kyma-installer namespace"
     kubectl create namespace kyma-installer
 
-    log "Install default resources from ${CLUSTER_DIR}/resources/"
-    kubectl apply -f "${CLUSTER_DIR}/resources/"
+    log "Install default resources from ${CLUSTER_DIR}/resources"
+    kubectl apply -f "${CLUSTER_DIR}/resources"
 }
 
 function createServiceAccount(){
