@@ -2,6 +2,7 @@
 set -eox
 
 SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+log "${BASH_SOURCE[0]}"
 ROOT_DIR="$( cd "${SCRIPTS_DIR}/../cluster" && pwd )"
 ARTIFACTS="${ARTIFACTS:-"${ROOT_DIR}/in"}"
 INSTALLATIONTIMEOUT=1800 #in this case it mean 30 minutes
