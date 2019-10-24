@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 set -eox
 
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-ROOT_DIR="$( cd "${SCRIPT_DIR}/../cluster" && pwd )"
+SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+ROOT_DIR="$( cd "${SCRIPTS_DIR}/../cluster" && pwd )"
 ARTIFACTS="${ARTIFACTS:-"${ROOT_DIR}/in"}"
 INSTALLATIONTIMEOUT=1800 #in this case it mean 30 minutes
 
 # shellcheck disable=SC1090
-source "${SCRIPT_DIR}/common.sh"
+source "${SCRIPTS_DIR}/common.sh"
 
 function getAssemblyPhase(){
     kubectl get Application.app.k8s.io kyma -o jsonpath="{.spec.assemblyPhase}"
