@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -eox
 
-log "${BASH_SOURCE[0]}"
+echo "${BASH_SOURCE[0]}"
+echo "$( dirname "${BASH_SOURCE[0]}" )"
 SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 ROOT_DIR="$( cd "${SCRIPTS_DIR}/../cluster" && pwd )"
 ARTIFACTS="${ARTIFACTS:-"${ROOT_DIR}/in"}"
