@@ -19,7 +19,7 @@ VERSION ?= $(DOCKER_TAG)
 KYMA_VERSION = $(shell cat ../KYMA_VERSION)
 
 .EXPORT_ALL_VARIABLES:
-.PHONY: ci-pr ci-master ci-release image-build image-push cluster-create cluster-attach cluster-service-account install manifest-build check-env tests-run
+.PHONY: ci-pr ci-master ci-release image-build image-push cluster-create cluster-attach cluster-service-account install manifest-build check-env tests-run gettext-install
 
 cluster-create: check-env
 	gcloud container --project "$(GCP_PROJECT)" clusters \
@@ -63,7 +63,10 @@ ifneq (,$(shell echo "$(DOCKER_TAG)" | grep '[0-9]\+\.[0-9]\+\.[0-9]\+$$'))
 	docker push $(IMAGE_MINOR)
 endif
 
-ci-master: manifest-build image-push
+gettext-install:
+	@apt-get install -y --no-install-recommends gettext
+
+ci-master: gettext-install manifest-build image-push
 ci-pr: ci-master tests-run
 ci-release: ci-master
 
