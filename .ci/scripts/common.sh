@@ -3,13 +3,14 @@ set -eox
 
 NAMESPACE="${NAMESPACE:-"default"}"
 SERVICE_ACCOUNT="${SERVICE_ACCOUNT:-"kyma-serviceaccount"}"
+CLUSTER_DIR="${CI_DIR}/cluster"
 
 function log() {
     echo "$(date +"%Y/%m/%d %T %Z"): ${1}"
 }
 
 function createCluster() {
-    kind create cluster --config "${ROOT_DIR}/cluster.yaml" --wait 3m
+    kind create cluster --config "${CLUSTER_DIR}/cluster.yaml" --wait 3m
     readonly KUBECONFIG="$(kind get kubeconfig-path --name="kind")"
     cp "${KUBECONFIG}" "${HOME}/.kube/config"
     kubectl cluster-info
@@ -22,8 +23,8 @@ function installDefaultResources() {
     log "Create kyma-installer namespace"
     kubectl create namespace kyma-installer
 
-    log "Install default resources from ${ROOT_DIR}/resources/"
-    kubectl apply -f "${ROOT_DIR}/resources/"
+    log "Install default resources from ${CLUSTER_DIR}/resources/"
+    kubectl apply -f "${CLUSTER_DIR}/resources/"
 }
 
 function createServiceAccount(){

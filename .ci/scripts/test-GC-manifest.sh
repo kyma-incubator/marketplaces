@@ -2,8 +2,8 @@
 set -eox
 
 SCRIPTS_DIR="$( cd "$( dirname "../.ci/scripts" )" && pwd )"
-ROOT_DIR="$( cd "${SCRIPTS_DIR}/../cluster" && pwd )"
-ARTIFACTS="${ARTIFACTS:-"${ROOT_DIR}/in"}"
+CI_DIR="$( cd "${SCRIPTS_DIR}/.." && pwd )"
+ARTIFACTS="${ARTIFACTS:-"${CI_DIR}/in"}"
 INSTALLATIONTIMEOUT=1800 #in this case it mean 30 minutes
 
 # shellcheck disable=SC1090
