@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-set -eox
+set -e
 
 readonly SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 readonly CI_DIR="$( cd "${SCRIPTS_DIR}/.." && pwd )"
 readonly KUBERNETES_VERSION="$( cat "${CI_DIR}/KIND_KUBERNETES_VERSION" )"
 readonly ARTIFACTS="${ARTIFACTS:-"${CI_DIR}/in"}"
-readonly INSTALLATIONTIMEOUT=1800 #in this case it mean 30 minutes
+readonly INSTALLATIONTIMEOUT=2700 #in this case it mean 45 minutes
 
 # shellcheck disable=SC1090
 source "${SCRIPTS_DIR}/common.sh"
@@ -29,6 +29,8 @@ function monitorInstallation(){
         if [ "${TIMECOUNTER}" -gt "${INSTALLATIONTIMEOUT}" ]
         then
             log "Installation timeout"
+            log "Last pods state:"
+            getAllPods
             exit 1
         fi
 
@@ -48,6 +50,10 @@ function monitorInstallation(){
 function applyArtifacts(){
     kubectl apply -f "https://raw.githubusercontent.com/GoogleCloudPlatform/marketplace-k8s-app-tools/master/crd/app-crd.yaml"
     kubectl apply -f "${ARTIFACTS}"
+}
+
+function getAllPods(){
+    kubectl get pods --all-namespaces
 }
 
 if [ "${INSTALLKUBECTL}" == "true" ]

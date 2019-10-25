@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -eox
+set -e
 
 readonly NAMESPACE="${NAMESPACE:-"default"}"
 readonly SERVICE_ACCOUNT="${SERVICE_ACCOUNT:-"kyma-serviceaccount"}"
