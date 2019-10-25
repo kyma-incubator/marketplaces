@@ -1,16 +1,17 @@
 #!/usr/bin/env bash
 set -eox
 
-NAMESPACE="${NAMESPACE:-"default"}"
-SERVICE_ACCOUNT="${SERVICE_ACCOUNT:-"kyma-serviceaccount"}"
-CLUSTER_DIR="${CI_DIR}/cluster"
+readonly NAMESPACE="${NAMESPACE:-"default"}"
+readonly SERVICE_ACCOUNT="${SERVICE_ACCOUNT:-"kyma-serviceaccount"}"
+readonly KIND_IMAGE="${KIND_IMAGE:-"kindest/node:${KUBERNETES_VERSION}"}"
+readonly CLUSTER_DIR="${CI_DIR}/cluster"
 
 function log() {
     echo "$(date +"%Y/%m/%d %T %Z"): ${1}"
 }
 
 function createCluster() {
-    kind create cluster --config "${CLUSTER_DIR}/cluster.yaml" --wait 3m
+    kind create cluster --config "${CLUSTER_DIR}/cluster.yaml" --wait 3m --image "${KIND_IMAGE}"
     readonly KUBECONFIG="$(kind get kubeconfig-path --name="kind")"
     cp "${KUBECONFIG}" "${HOME}/.kube/config"
     kubectl cluster-info
@@ -31,6 +32,17 @@ function createServiceAccount(){
     log "Create Service Acoount"
     kubectl create sa "${SERVICE_ACCOUNT}" --namespace "${NAMESPACE}"
 	kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --serviceaccount="${NAMESPACE}:${SERVICE_ACCOUNT}"
+}
+
+function ensureExpectedKubectlVersion() {
+    if command -v kubectl >/dev/null 2>&1; then
+        log "Removing built-in kubectl version"
+        rm -rf "$(command -v kubectl)"
+    fi
+
+    curl -LO "https://storage.googleapis.com/kubernetes-release/release/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl" --fail \
+        && chmod +x kubectl \
+        && mv kubectl /usr/local/bin/kubectl
 }
 
 function finalize() {

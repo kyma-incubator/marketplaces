@@ -1,13 +1,16 @@
 #!/usr/bin/env bash
 set -eox
 
-SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-CI_DIR="$( cd "${SCRIPTS_DIR}/.." && pwd )"
-ARTIFACTS="${ARTIFACTS:-"${CI_DIR}/in"}"
-INSTALLATIONTIMEOUT=1800 #in this case it mean 30 minutes
+readonly SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+readonly CI_DIR="$( cd "${SCRIPTS_DIR}/.." && pwd )"
+readonly KUBERNETES_VERSION="$( cat "${CI_DIR}/KIND_KUBERNETES_VERSION" )"
+readonly ARTIFACTS="${ARTIFACTS:-"${CI_DIR}/in"}"
+readonly INSTALLATIONTIMEOUT=1800 #in this case it mean 30 minutes
 
 # shellcheck disable=SC1090
 source "${SCRIPTS_DIR}/common.sh"
+
+INSTALLKUBECTL="true"
 
 function getAssemblyPhase(){
     kubectl get Application.app.k8s.io kyma -o jsonpath="{.spec.assemblyPhase}"
@@ -46,6 +49,12 @@ function applyArtifacts(){
     kubectl apply -f "https://raw.githubusercontent.com/GoogleCloudPlatform/marketplace-k8s-app-tools/master/crd/app-crd.yaml"
     kubectl apply -f "${ARTIFACTS}"
 }
+
+if [ "${INSTALLKUBECTL}" == "true" ]
+then
+    log "Install kubectl in version ${KUBERNETES_VERSION}"
+    ensureExpectedKubectlVersion
+fi
 
 log "createCluster"
 createCluster
