@@ -1,16 +1,46 @@
 #!/usr/bin/env bash
 set -e
 
+readonly ARGS=("$@")
 readonly SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 readonly CI_DIR="$( cd "${SCRIPTS_DIR}/.." && pwd )"
-readonly KUBERNETES_VERSION="$( cat "${CI_DIR}/KIND_KUBERNETES_VERSION" )"
+readonly KUBERNETES_VERSION="${KUBERNETES_VERSION:-"v1.15.3"}"
 readonly ARTIFACTS="${ARTIFACTS:-"${CI_DIR}/in"}"
-readonly INSTALLATIONTIMEOUT=2700 #in this case it mean 45 minutes
+readonly INSTALLATIONTIMEOUT=1800 #in this case it mean 30 minutes
 
 # shellcheck disable=SC1090
 source "${SCRIPTS_DIR}/common.sh"
 
-INSTALLKUBECTL="true"
+ENSUREKUBECTL="false"
+
+function readFlags() {
+    while test $# -gt 0; do
+        case "$1" in
+            -h|--help)
+                shift
+                echo "Script that tests manifest for google-cloud marketplace"
+                echo " "
+                echo "Options:"
+                echo "  -h --help            Print usage."
+                echo "     --ensure-kubectl  Update kubectl to the same version as cluster."
+                echo " "
+                echo "Environment variables:"
+                echo "  KUBERNETES_VERSION   Version of kubernetes for kind installation"
+                exit 0
+                ;;
+            --ensure-kubectl)
+                shift
+                ENSUREKUBECTL="true"
+                ;;
+            *)
+                log "$1 is not a recognized flag, use --help flag for a list of avaiable options!"
+                return 1
+                ;;
+        esac
+    done
+
+    readonly ENSUREKUBECTL
+}
 
 function getAssemblyPhase(){
     kubectl get Application.app.k8s.io kyma -o jsonpath="{.spec.assemblyPhase}"
@@ -52,11 +82,17 @@ function applyArtifacts(){
     kubectl apply -f "${ARTIFACTS}"
 }
 
-function getAllPods(){
+function getLastInstallationState(){
+    log "All pods:"
     kubectl get pods --all-namespaces
+
+    log "Initializer logs:"
+    kubectl logs -l app.kubernetes.io/name=kyma --tail=1000
 }
 
-if [ "${INSTALLKUBECTL}" == "true" ]
+readFlags "${ARGS[@]}"
+
+if [ "${ENSUREKUBECTL}" == "true" ]
 then
     log "Install kubectl in version ${KUBERNETES_VERSION}"
     ensureExpectedKubectlVersion
