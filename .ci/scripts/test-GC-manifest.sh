@@ -6,7 +6,7 @@ readonly SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 readonly CI_DIR="$( cd "${SCRIPTS_DIR}/.." && pwd )"
 readonly KUBERNETES_VERSION="${KUBERNETES_VERSION:-"v1.15.3"}"
 readonly ARTIFACTS="${ARTIFACTS:-"${CI_DIR}/in"}"
-readonly INSTALLATIONTIMEOUT=1800 #in this case it mean 30 minutes
+readonly INSTALLATIONTIMEOUT=1000 #in this case it mean 20 minutes
 
 # shellcheck disable=SC1090
 source "${SCRIPTS_DIR}/common.sh"
@@ -42,39 +42,46 @@ function readFlags() {
     readonly ENSUREKUBECTL
 }
 
-function getAssemblyPhase(){
-    kubectl get Application.app.k8s.io kyma -o jsonpath="{.spec.assemblyPhase}"
-}
-
 function monitorInstallation(){
     TIMETOWAIT=2
     TIMECOUNTER=0
+    STATE=""
     PHASE=""
-    NEWPHASE=""
-
-    while [ "${NEWPHASE}" != "Succeeded" ] ;
+    while [ "${PHASE}" != "Succeeded" ] ;
     do
-        NEWPHASE=$(getAssemblyPhase)
+        PHASE=$(getAssemblyPhase)
 
         if [ "${TIMECOUNTER}" -gt "${INSTALLATIONTIMEOUT}" ]
         then
             log "Installation timeout"
             log "Last pods state:"
-            getAllPods
+            getLastInstallationState
             exit 1
         fi
 
-        if [ "${PHASE}" != "${NEWPHASE}" ]
+        if [ "${PHASE}" == "Pending" ]
         then
-            PHASE="${NEWPHASE}"
-            log "${PHASE}"
+            NEWSTATE="$(getInstallationState)"
+            if [ "${STATE}" != "${NEWSTATE}" ]
+            then
+                STATE="${NEWSTATE}"
+                log "${STATE}"
+            fi 
         fi
 
         sleep ${TIMETOWAIT};
         TIMECOUNTER=$(( TIMECOUNTER + TIMETOWAIT ))
     done
 
-    log "Kyma status: ${PHASE}"
+    log "Kyma status: ${STATE}"
+}
+
+function getAssemblyPhase(){
+    kubectl get Application.app.k8s.io kyma -o jsonpath="{.spec.assemblyPhase}"
+}
+
+function getInstallationState(){
+    kubectl get Application.app.k8s.io kyma -o jsonpath="{.spec.info[4].value}"
 }
 
 function applyArtifacts(){
