@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -eo pipefile
+set -eo pipefail
 
 readonly ARGS=("$@")
 readonly SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
