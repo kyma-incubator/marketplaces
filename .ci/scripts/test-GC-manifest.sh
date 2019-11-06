@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -e
+set -eo pipefile
 
 readonly ARGS=("$@")
 readonly SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -171,11 +171,8 @@ function finalize() {
 }
 
 function main(){
+    trap junit::test_fail ERR
     junit::suite_init "Kyma_Integration"
-
-    junit::test_start "Read_Flags"
-    readFlags "${ARGS[@]}" 2>&1 | junit::test_output
-    junit::test_pass
 
     junit::test_start "Tune_Inotify"
     if [[ ${TUNE_INOTIFY} = "true" ]]; then
@@ -234,8 +231,6 @@ function main(){
 }
 
 trap finalize EXIT
-trap junit::test_fail ERR
 
+readFlags "${ARGS[@]}"
 main
-
-exit 0
