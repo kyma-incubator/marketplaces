@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 set -eo pipefail
 
-readonly ARGS=("$@")
 readonly SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 readonly CI_DIR="$( cd "${SCRIPTS_DIR}/.." && pwd )"
 readonly LIB_DIR="$( cd "${GOPATH}/src/github.com/kyma-project/test-infra/prow/scripts/lib" && pwd )"
@@ -29,6 +28,7 @@ source "${LIB_DIR}/kubernetes.sh"
 ENSUREKUBECTL="false"
 START_DOCKER="false"
 TUNE_INOTIFY="false"
+DOMAIN=kyma.local
 
 function readFlags() {
     while test $# -gt 0; do
@@ -120,8 +120,8 @@ function getLastInstallationState(){
     log::info "All pods:"
     kubectl get pods --all-namespaces
 
-    log::info "Initializer log::infos:"
-    kubectl log::infos -l app.kubernetes.io/name=kyma --tail=1000
+    log::info "Initializer:"
+    kubectl logs -l app.kubernetes.io/name=kyma --tail=1000
 }
 
 function createServiceAccount() {
@@ -170,6 +170,15 @@ function finalize() {
     return "${exit_status}"
 }
 
+function customize_resources(){
+    CLUSTER_IP=$(docker inspect --format='{{ .NetworkSettings.IPAddress }}' "${CLUSTER_NAME}-worker")
+
+    log::info "Customize 03-overrides.yaml"        
+    value=$(< "${RESOURCES_DIR}/03-overrides.yaml" sed 's/\.minikubeIP: .*/\.minikubeIP: '\""${CLUSTER_IP}"\"'/g' \
+       | sed 's/\.domainName: .*/\.domainName: '\""${DOMAIN}"\"'/g')
+    echo "$value" > "${RESOURCES_DIR}/03-overrides.yaml"
+}
+
 function main(){
     trap junit::test_fail ERR
     junit::suite_init "Kyma_Integration"
@@ -211,6 +220,7 @@ function main(){
     junit::test_start "Install_Default_Resources"
     log::info "Install_Default_Resources" 2>&1 | junit::test_output
     createNamespace "kyma-installer" 2>&1 | junit::test_output
+    customize_resources 2>&1 | junit::test_output
     kind::install_default "${RESOURCES_DIR}" 2>&1 | junit::test_output
     junit::test_pass
 
