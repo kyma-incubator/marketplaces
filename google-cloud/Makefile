@@ -64,7 +64,7 @@ ifneq (,$(shell echo "$(DOCKER_TAG)" | grep '[0-9]\+\.[0-9]\+\.[0-9]\+$$'))
 endif
 
 gettext-install:
-	@apt-get install -y --no-install-recommends gettext
+	apt-get install -y --no-install-recommends gettext
 
 ci-master: gettext-install manifest-build image-push
 ci-pr: ci-master tests-run
