@@ -171,7 +171,7 @@ function finalize() {
 }
 
 function customize_resources(){
-    CLUSTER_IP=$(docker inspect --format='{{ .NetworkSettings.IPAddress }}' "${CLUSTER_NAME}-worker")
+    CLUSTER_IP=$(kind::worker_ip "${CLUSTER_NAME}")
 
     log::info "Customize 03-overrides.yaml"        
     value=$(< "${RESOURCES_DIR}/03-overrides.yaml" sed 's/\.minikubeIP: .*/\.minikubeIP: '\""${CLUSTER_IP}"\"'/g' \
