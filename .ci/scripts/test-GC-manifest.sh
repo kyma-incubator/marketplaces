@@ -242,5 +242,5 @@ function main(){
 
 trap finalize EXIT
 
-readFlags "${ARGS[@]}"
+readFlags "${@}"
 main
