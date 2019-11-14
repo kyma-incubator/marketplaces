@@ -11,7 +11,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-     app.kubernetes.io/name: $APPLICATION_NAME
+      app.kubernetes.io/name: $APPLICATION_NAME
   descriptor:
     type: Kyma
     version: "$VERSION"
