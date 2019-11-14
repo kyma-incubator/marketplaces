@@ -48,7 +48,7 @@ manifest-build:
 
 image-build:
 	docker build \
-	    --build-arg KYMA_VERSION=$(KYMA_VERSION) \
+		--build-arg KYMA_VERSION=$(KYMA_VERSION) \
 		--build-arg DEPLOYER_VERSION=$(DOCKER_TAG) \
 		--build-arg KYMA_INITIALIZER_IMAGE=$(KYMA_INITIALIZER_IMAGE) \
 		-t $(IMAGE) .
@@ -61,7 +61,7 @@ ifneq (,$(shell echo "$(DOCKER_TAG)" | grep '[0-9]\+\.[0-9]\+\.[0-9]\+$$'))
 endif
 
 gettext-install:
-    apt-get install -y --no-install-recommends gettext
+	apt-get install -y --no-install-recommends gettext
 
 ci-master: gettext-install manifest-build image-push
 ci-pr: ci-master
