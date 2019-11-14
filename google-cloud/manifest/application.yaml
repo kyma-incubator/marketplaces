@@ -28,16 +28,16 @@ spec:
     notes: |-
       To access your Kyma cluster, import the Kyma self-signed certificate to your trusted certificate authorities.
       ### MacOS
-      Copy the following command and paste it into your terminal window:
+      1. Copy the following command and paste it into your terminal window:
       ```bash
       tmpfile=$(mktemp /tmp/temp-cert.XXXXXX) \
           && pbpaste > $tmpfile \
           && sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain $tmpfile \
           && rm $tmpfile
       ```
-      On the GCP website, click **preview secret data** next to the **Certificate** details, and copy the certificate string.
+      2. On the GCP website, click **preview secret data** next to the **Certificate** details, and copy the certificate string.
       
-      Run the command you previously pasted into your terminal window.
+      3. Run the command you previously pasted into your terminal window.
       ### Linux
 
       Copy the certificate from **Application details**, save it locally, and export its path as an environment variable. See the example:
@@ -49,17 +49,17 @@ spec:
 
       #### Debian-based distro
 
-      Check if the `ca-certificates` package is installed:
+      1. Check if the `ca-certificates` package is installed:
 
       ```
       apt list ca-certificates
       ```
-      If the package is not listed, install it with this command:
+      2. If the package is not listed, install it with this command:
 
       ```
       sudo apt install ca-certificates
       ```
-      Copy the Kyma certificate and update the certificate list:
+      3. Copy the Kyma certificate and update the certificate list:
 
       ```
       sudo sh -c "cp ${KYMA_CERT} /usr/local/share/ca-certificates/kyma.crt && \   
@@ -75,17 +75,17 @@ spec:
       ```
       #### Centos6
       ​
-      Check if the `ca-certificates` package is installed:
+      1. Check if the `ca-certificates` package is installed:
       ​
       ```
       yum list installed ca-certificates
       ```
-      If the package is not listed, install it with this command:
+      2. If the package is not listed, install it with this command:
 
       ```
       yum install ca-certificates
       ```
-      Copy the Kyma certificate and update the certificate list:
+      3. Copy the Kyma certificate and update the certificate list:
       ​
       ```
       sudo sh -c "cp ${KYMA_CERT} /etc/pki/ca-trust/source/anchors/ && \
@@ -99,12 +99,14 @@ spec:
       sudo sh -c "cat ${KYMA_CERT} >>/etc/pki/tls/certs/ca-bundle.crt"
       ```              
       ### Windows
-      Run the Command Prompt as an Administrator. Copy the following command and paste it into your Command Prompt window:
+      1. Run the Command Prompt as an Administrator. 
+      
+      2. Copy the following command and paste it into your Command Prompt window:
       ```
       powershell "$(Get-Clipboard | Out-File -FilePath kyma.cer | Out-Host;$?) -and $(certutil -f -addstore Root kyma.cer | Out-Host;$?) -and $(Remove-Item -path kyma.cer | Out-Host;$?)"
       ```
-      On the GCP website, click **preview secret data** next to the **Certificate** details, and copy the certificate string.
-      Run the command you previously pasted into your Command Prompt window.
+      3. On the GCP website, click **preview secret data** next to the **Certificate** details, and copy the certificate string.
+      4. Run the command you previously pasted into your Command Prompt window.
 
   info:
     - name: Address
