@@ -27,94 +27,83 @@ spec:
         url: https://github.com/kyma-project
     notes: |-
       To access your Kyma cluster, import the Kyma self-signed certificate to your trusted certificate authorities.
-
       ### MacOS
-
       Copy the following command and paste it into your terminal window:
-
       ```bash
       tmpfile=$(mktemp /tmp/temp-cert.XXXXXX) \
           && pbpaste > $tmpfile \
           && sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain $tmpfile \
           && rm $tmpfile
       ```
-
       On the GCP website, click **preview secret data** next to the **Certificate** details, and copy the certificate string.
       
       Run the command you previously pasted into your terminal window.
+      ### Linux
 
-      #### Linux
-      
-      1. Copy certificate from `Application details` than save it locally and export it’s path as environmental variable e.g.:
-      
+      Copy the certificate from **Application details**, save it locally, and export its path as an environment variable. See the example:
+
       ```
       export KYMA_CERT=/tmp/kyma.crt
       ```
-      
-      1. On `Debian` base distro:
-      
-          1.1. Check if `ca-certificates` package is installed:
-      
-          ```
-          apt list ca-certificates
-          ```
-      
-          if package is not listed install it:
-      
-          ```
-          sudo apt install ca-certificates
-          ```
-      
-          1.2. Copy kyma certificate and update list of certificates:
-      
-          ```
-          sudo sh -c "cp ${KYMA_CERT} /usr/local/share/ca-certificates/kyma.crt && \   
-                      update-ca-certificates --fresh && rm -i ${KYMA_CERT}"
-          ```
-          
-      2. On Arch base distro:
-      
-          ```
-          sudo sh -c "cp ${KYMA_CERT} /etc/ca-certificates/trust-source/anchors && \
-                      trust extract-compat && rm -i ${KYMA_CERT}"
-          ```
-      3. On Centos6:
-      
-          1.1. Check if `ca-certificates` package is installed:
-      
-          ```
-          yum list installed ca-certificates
-          ```
-      
-          if package is not listed install it:
-      
-          ```
-          yum install ca-certificates
-          ```
-      
-          1.2. Enable dynamic 
-      
-          ```
-          sudo sh -c "cp ${KYMA_CERT} /etc/pki/ca-trust/source/anchors/ && \
-                      update-ca-trust extract && rm -i ${KYMA_CERT}"
-          ``` 
-      
-      4. On Centos5:
-      
-          ```
-          sudo sh -c "cat ${KYMA_CERT} >>/etc/pki/tls/certs/ca-bundle.crt"
-          ```
-      
+      Choose your Linux distribution and follow next steps.
+
+      #### Debian-based distro
+
+      Check if the `ca-certificates` package is installed:
+
+      ```
+      apt list ca-certificates
+      ```
+      If the package is not listed, install it with this command:
+
+      ```
+      sudo apt install ca-certificates
+      ```
+      Copy the Kyma certificate and update the certificate list:
+
+      ```
+      sudo sh -c "cp ${KYMA_CERT} /usr/local/share/ca-certificates/kyma.crt && \   
+      update-ca-certificates --fresh && rm -i ${KYMA_CERT}"
+      ```
+      #### Arch-based distro
+
+      Run this command:
+
+      ```
+      sudo sh -c "cp ${KYMA_CERT} /etc/ca-certificates/trust-source/anchors && \
+      trust extract-compat && rm -i ${KYMA_CERT}"
+      ```
+      #### Centos6
+      ​
+      Check if the `ca-certificates` package is installed:
+      ​
+      ```
+      yum list installed ca-certificates
+      ```
+      If the package is not listed, install it with this command:
+
+      ```
+      yum install ca-certificates
+      ```
+      Copy the Kyma certificate and update the certificate list:
+      ​
+      ```
+      sudo sh -c "cp ${KYMA_CERT} /etc/pki/ca-trust/source/anchors/ && \
+      update-ca-trust extract && rm -i ${KYMA_CERT}"
+      ```
+      #### Centos5
+      ​
+      Run this command:
+      ​
+      ```
+      sudo sh -c "cat ${KYMA_CERT} >>/etc/pki/tls/certs/ca-bundle.crt"
+      ```              
       ### Windows
-
       Run the Command Prompt as an Administrator. Copy the following command and paste it into your Command Prompt window:
-
       ```
       powershell "$(Get-Clipboard | Out-File -FilePath kyma.cer | Out-Host;$?) -and $(certutil -f -addstore Root kyma.cer | Out-Host;$?) -and $(Remove-Item -path kyma.cer | Out-Host;$?)"
       ```
-
       On the GCP website, click **preview secret data** next to the **Certificate** details, and copy the certificate string.
-
       Run the command you previously pasted into your Command Prompt window.
 
   info:
