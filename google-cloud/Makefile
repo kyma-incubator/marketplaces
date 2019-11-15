@@ -55,7 +55,7 @@ image-build:
 		-t $(IMAGE) .
 
 tests-run:
-	../.ci/scripts/test-GC-manifest.sh --ensure-kubectl
+	../.ci/scripts/test-GC-manifest.sh --ensure-kubectl --tune-inotify
 
 image-push: image-build
 	docker push $(IMAGE)

@@ -69,7 +69,7 @@ function readFlags() {
     readonly ENSUREKUBECTL START_DOCKER TUNE_INOTIFY
 }
 
-function monitorInstallation(){
+function monitorInstallation() {
     TIMETOWAIT=2
     TIMECOUNTER=0
     STATE=""
@@ -135,7 +135,7 @@ function createNamespace() {
     kubectl create namespace "$1"
 }
 
-function tune_inotify {
+function tune_inotify() {
     log::info "Increasing limits for inotify"
     sysctl -w fs.inotify.max_user_watches=524288
     sysctl -w fs.inotify.max_user_instances=512
