@@ -19,6 +19,7 @@ VERSION ?= $(DOCKER_TAG)
 KYMA_VERSION = $(shell cat ../KYMA_VERSION)
 
 .EXPORT_ALL_VARIABLES:
+
 .PHONY: ci-pr ci-master ci-release image-build image-push cluster-create cluster-attach cluster-service-account install manifest-build check-env tests-run gettext-install
 
 cluster-create: check-env
@@ -48,7 +49,7 @@ manifest-build:
 
 image-build:
 	docker build \
-	    --build-arg KYMA_VERSION=$(KYMA_VERSION) \
+		--build-arg KYMA_VERSION=$(KYMA_VERSION) \
 		--build-arg DEPLOYER_VERSION=$(DOCKER_TAG) \
 		--build-arg KYMA_INITIALIZER_IMAGE=$(KYMA_INITIALIZER_IMAGE) \
 		-t $(IMAGE) .
