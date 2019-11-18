@@ -96,21 +96,21 @@ function monitorInstallation(){
     PHASESPEC="{.spec.assemblyPhase}"
     STATUSSPEC="{.spec.info[4].value}"
 
-    while [ "$PHASE" != "Pending" ] 
-    do 
+    while [ "$PHASE" != "Pending" ]
+    do
         waitAndCount "$TIMETOWAIT"
         PHASE="$(getApplicationJsonpath $PHASESPEC)"
-    done 
+    done
 
     while [ "$STATE" != "Succeeded" ]
     do
         waitAndCount "$TIMETOWAIT"
-        NEWSTATE="$(getApplicationJsonpath "$STATUSSPEC")"
+        NEWSTATE="$(getApplicationJsonpath $STATUSSPEC)"
         if [ "${STATE}" != "${NEWSTATE}" ]
         then
             STATE="${NEWSTATE}"
             log::info "${STATE}"
-        fi 
+        fi
     done
 
     log::info "Kyma status: ${STATE}"
