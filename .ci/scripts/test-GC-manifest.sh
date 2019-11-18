@@ -3,13 +3,15 @@ set -eo pipefail
 
 readonly SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 readonly CI_DIR="$( cd "${SCRIPTS_DIR}/.." && pwd )"
-readonly LIB_DIR="$( cd "${GOPATH}/src/github.com/kyma-project/test-infra/prow/scripts/lib" && pwd )"
-readonly CLUSTER_DIR="$( cd "${CI_DIR}/cluster" && pwd )"
-readonly RESOURCES_DIR="$( cd "${CLUSTER_DIR}/resources" && pwd )"
-readonly CLUSTER_CONFIG="${CLUSTER_DIR}/cluster.yaml"
-readonly KUBERNETES_VERSION="${KUBERNETES_VERSION:-"v1.15.3"}"
 readonly ARTIFACTS_DIR="${ARTIFACTS:-"${CI_DIR}/in"}"
-readonly INSTALLATIONTIMEOUT=1000 #in this case it mean 20 minutes
+
+readonly TESTINFRA_DIR="$( cd "${GOPATH}/src/github.com/kyma-project/test-infra" && pwd )"
+readonly KIND_RESOURCES_DIR="$( cd "${TESTINFRA_DIR}/prow/scripts/kind/resources" && pwd )"
+readonly KIND_CONFIG_DIR="$( cd "${TESTINFRA_DIR}/kind/config" && pwd)"
+readonly LIB_DIR="$( cd "${TESTINFRA_DIR}/prow/scripts/lib" && pwd )"
+readonly KIND_CLUSTER_CONFIG="${TESTINFRA_DIR}/prow/scripts/kind/cluster.yaml"
+
+readonly KUBERNETES_VERSION="${KUBERNETES_VERSION:-"v1.15.3"}"
 readonly CLUSTER_NAME="${CLUSTER_NAME:-"kyma"}"
 readonly NAMESPACE="${NAMESPACE:-"default"}"
 readonly SERVICE_ACCOUNT="${SERVICE_ACCOUNT:-"kyma-serviceaccount"}"
@@ -24,6 +26,10 @@ source "${LIB_DIR}/docker.sh"
 source "${LIB_DIR}/kind.sh"
 # shellcheck disable=SC1090
 source "${LIB_DIR}/kubernetes.sh"
+
+INSTALLATIONTIMEOUT=1500
+TIME_IN_SECONDS=$(date +%s)
+TIME_OF_FINISH=$(( INSTALLATIONTIMEOUT + TIME_IN_SECONDS ))
 
 ENSUREKUBECTL="false"
 START_DOCKER="false"
@@ -69,46 +75,45 @@ function readFlags() {
     readonly ENSUREKUBECTL START_DOCKER TUNE_INOTIFY
 }
 
-function monitorInstallation() {
-    TIMETOWAIT=2
-    TIMECOUNTER=0
+function waitAndCount() {
+    sleep "$1"
+    if [ "$(date +%s)" -gt "${TIME_OF_FINISH}" ]
+    then
+        log::error "Installation timeout"
+        exit 1
+    fi
+}
+
+function getApplicationJsonpath() {
+    SPEC="$1"
+    kubectl get Application.app.k8s.io kyma -o jsonpath="${SPEC}" || true
+}
+
+function monitorInstallation(){
     STATE=""
     PHASE=""
-    while [ "${PHASE}" != "Succeeded" ] ;
+    TIMETOWAIT=1
+    PHASESPEC="{.spec.assemblyPhase}"
+    STATUSSPEC="{.spec.info[4].value}"
+
+    while [ "$PHASE" != "Pending" ] 
+    do 
+        waitAndCount "$TIMETOWAIT"
+        PHASE="$(getApplicationJsonpath $PHASESPEC)"
+    done 
+
+    while [ "$STATE" != "Succeeded" ]
     do
-        PHASE=$(getAssemblyPhase)
-
-        if [ "${TIMECOUNTER}" -gt "${INSTALLATIONTIMEOUT}" ]
+        waitAndCount "$TIMETOWAIT"
+        NEWSTATE="$(getApplicationJsonpath "$STATUSSPEC")"
+        if [ "${STATE}" != "${NEWSTATE}" ]
         then
-            log::info "Installation timeout"
-            log::info "Last pods state:"
-            getLastInstallationState
-            exit 1
-        fi
-
-        if [ "${PHASE}" == "Pending" ]
-        then
-            NEWSTATE="$(getInstallationState)"
-            if [ "${STATE}" != "${NEWSTATE}" ]
-            then
-                STATE="${NEWSTATE}"
-                log::info "${STATE}"
-            fi 
-        fi
-
-        sleep ${TIMETOWAIT};
-        TIMECOUNTER=$(( TIMECOUNTER + TIMETOWAIT ))
+            STATE="${NEWSTATE}"
+            log::info "${STATE}"
+        fi 
     done
 
     log::info "Kyma status: ${STATE}"
-}
-
-function getAssemblyPhase(){
-    kubectl get Application.app.k8s.io kyma -o jsonpath="{.spec.assemblyPhase}"
-}
-
-function getInstallationState(){
-    kubectl get Application.app.k8s.io kyma -o jsonpath="{.spec.info[4].value}"
 }
 
 function applyArtifacts(){
@@ -116,18 +121,10 @@ function applyArtifacts(){
     kubectl apply -f "${ARTIFACTS_DIR}"
 }
 
-function getLastInstallationState(){
-    log::info "All pods:"
-    kubectl get pods --all-namespaces
-
-    log::info "Initializer:"
-    kubectl logs -l app.kubernetes.io/name=kyma --tail=1000
-}
-
 function createServiceAccount() {
     log::info "Create Service Acoount"
     kubectl create sa "${SERVICE_ACCOUNT}" --namespace "${NAMESPACE}"
-	kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --serviceaccount="${NAMESPACE}:${SERVICE_ACCOUNT}"
+    kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --serviceaccount="${NAMESPACE}:${SERVICE_ACCOUNT}"
 }
 
 function createNamespace() {
@@ -170,13 +167,13 @@ function finalize() {
     return "${exit_status}"
 }
 
-function customize_resources(){
+function apply_customize_resources(){
     CLUSTER_IP=$(kind::worker_ip "${CLUSTER_NAME}")
 
-    log::info "Customize 03-overrides.yaml"        
-    value=$(< "${RESOURCES_DIR}/03-overrides.yaml" sed 's/\.minikubeIP: .*/\.minikubeIP: '\""${CLUSTER_IP}"\"'/g' \
-       | sed 's/\.domainName: .*/\.domainName: '\""${DOMAIN}"\"'/g')
-    echo "$value" > "${RESOURCES_DIR}/03-overrides.yaml"
+    log::info "Customize overrides.yaml"        
+    < "${KIND_CONFIG_DIR}/overrides.yaml" sed 's/\.minikubeIP: .*/\.minikubeIP: '\""${CLUSTER_IP}"\"'/g' \
+       | sed 's/\.domainName: .*/\.domainName: '\""${DOMAIN}"\"'/g' \
+       | kubectl apply -f -
 }
 
 function main(){
@@ -212,7 +209,7 @@ function main(){
 
     junit::test_start "Create_Cluster"
     log::info "Create_Cluster" 2>&1 | junit::test_output
-    kind::create_cluster "${CLUSTER_NAME}" "${KUBERNETES_VERSION}" "${CLUSTER_CONFIG}" 2>&1 | junit::test_output
+    kind::create_cluster "${CLUSTER_NAME}" "${KUBERNETES_VERSION}" "${KIND_CLUSTER_CONFIG}" 2>&1 | junit::test_output
     CLUSTER_PROVISIONED="true"
     readonly CLUSTER_PROVISIONED
     junit::test_pass
@@ -220,8 +217,8 @@ function main(){
     junit::test_start "Install_Default_Resources"
     log::info "Install_Default_Resources" 2>&1 | junit::test_output
     createNamespace "kyma-installer" 2>&1 | junit::test_output
-    customize_resources 2>&1 | junit::test_output
-    kind::install_default "${RESOURCES_DIR}" 2>&1 | junit::test_output
+    apply_customize_resources 2>&1 | junit::test_output
+    kind::install_default "${KIND_RESOURCES_DIR}" 2>&1 | junit::test_output
     junit::test_pass
 
     junit::test_start "Create_Serviceclass"
