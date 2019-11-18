@@ -102,7 +102,7 @@ function monitorInstallation(){
         PHASE="$(getApplicationJsonpath $PHASESPEC)"
     done
 
-    while [ "$STATE" != "Succeeded" ]
+    while [ "$(getApplicationJsonpath $PHASESPEC)" != "Succeeded" ]
     do
         waitAndCount "$TIMETOWAIT"
         NEWSTATE="$(getApplicationJsonpath $STATUSSPEC)"
