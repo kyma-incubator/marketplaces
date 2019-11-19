@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 set -eo pipefail
 
-readonly SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-readonly CI_DIR="$( cd "${SCRIPTS_DIR}/.." && pwd )"
-readonly ARTIFACTS_DIR="${ARTIFACTS:-"${CI_DIR}/in"}"
+readonly ARTIFACTS_DIR="${ARTIFACTS:-"out"}"
 
 readonly TESTINFRA_DIR="$( cd "${GOPATH}/src/github.com/kyma-project/test-infra" && pwd )"
 readonly KIND_RESOURCES_DIR="$( cd "${TESTINFRA_DIR}/prow/scripts/kind/resources" && pwd )"
