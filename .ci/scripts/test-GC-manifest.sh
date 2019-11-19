@@ -5,7 +5,6 @@ readonly ARTIFACTS_DIR="${ARTIFACTS:-"out"}"
 
 readonly TESTINFRA_DIR="$( cd "${GOPATH}/src/github.com/kyma-project/test-infra" && pwd )"
 readonly KIND_RESOURCES_DIR="$( cd "${TESTINFRA_DIR}/prow/scripts/kind/resources" && pwd )"
-readonly KIND_CONFIG_DIR="$( cd "${TESTINFRA_DIR}/kind/config" && pwd)"
 readonly LIB_DIR="$( cd "${TESTINFRA_DIR}/prow/scripts/lib" && pwd )"
 readonly KIND_CLUSTER_CONFIG="${TESTINFRA_DIR}/prow/scripts/kind/cluster.yaml"
 
@@ -169,9 +168,10 @@ function apply_customize_resources(){
     CLUSTER_IP=$(kind::worker_ip "${CLUSTER_NAME}")
 
     log::info "Customize overrides.yaml"        
-    < "${KIND_CONFIG_DIR}/overrides.yaml" sed 's/\.minikubeIP: .*/\.minikubeIP: '\""${CLUSTER_IP}"\"'/g' \
-       | sed 's/\.domainName: .*/\.domainName: '\""${DOMAIN}"\"'/g' \
-       | kubectl apply -f -
+    curl https://raw.githubusercontent.com/kyma-project/kyma/master/installation/resources/installer-config-kind.yaml.tpl \
+        | sed 's/\.minikubeIP: .*/\.minikubeIP: '\""${CLUSTER_IP}"\"'/g' \
+        | sed 's/\.domainName: .*/\.domainName: '\""${DOMAIN}"\"'/g' \
+        | kubectl apply -f -
 }
 
 function main(){
