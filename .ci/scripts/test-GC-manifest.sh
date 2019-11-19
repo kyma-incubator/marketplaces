@@ -207,8 +207,8 @@ function main(){
 
     junit::test_start "Create_Cluster"
     log::info "Create_Cluster" 2>&1 | junit::test_output
-    kind::create_cluster "${CLUSTER_NAME}" "${KUBERNETES_VERSION}" "${KIND_CLUSTER_CONFIG}" 2>&1 | junit::test_output
     CLUSTER_PROVISIONED="true"
+    kind::create_cluster "${CLUSTER_NAME}" "${KUBERNETES_VERSION}" "${KIND_CLUSTER_CONFIG}" 2>&1 | junit::test_output
     readonly CLUSTER_PROVISIONED
     junit::test_pass
 
