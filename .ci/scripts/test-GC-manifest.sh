@@ -13,6 +13,11 @@ readonly CLUSTER_NAME="${CLUSTER_NAME:-"kyma"}"
 readonly NAMESPACE="${NAMESPACE:-"default"}"
 readonly SERVICE_ACCOUNT="${SERVICE_ACCOUNT:-"kyma-serviceaccount"}"
 
+readonly TMP_DIR="$(mktemp -d)"
+readonly TMP_BIN_DIR="${TMP_DIR}/bin"
+mkdir -p "${TMP_BIN_DIR}"
+export PATH="${TMP_BIN_DIR}:${PATH}"
+
 # shellcheck disable=SC1090
 source "${LIB_DIR}/log.sh"
 # shellcheck disable=SC1090
@@ -23,6 +28,8 @@ source "${LIB_DIR}/docker.sh"
 source "${LIB_DIR}/kind.sh"
 # shellcheck disable=SC1090
 source "${LIB_DIR}/kubernetes.sh"
+# shellcheck disable=SC1090
+source "${LIB_DIR}/host.sh"
 
 INSTALLATIONTIMEOUT=1500
 TIME_IN_SECONDS=$(date +%s)
@@ -199,7 +206,7 @@ function main(){
     if [ "${ENSUREKUBECTL}" == "true" ]
     then
         log::info "Ensure_Kubectl" 2>&1 | junit::test_output
-        kubernetes::ensure_kubectl "${KUBERNETES_VERSION}" 2>&1 | junit::test_output
+        kubernetes::ensure_kubectl "${KUBERNETES_VERSION}" "$(host::os)" "${TMP_BIN_DIR}" 2>&1 | junit::test_output
         junit::test_pass
     else
         junit::test_skip
