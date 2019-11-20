@@ -64,20 +64,20 @@ To install the application manually on a Google Kubernetes Engine cluster, follo
 
 Follow the steps to run the integration pipeline for the repository.
 
-1. Export variable:
+1. Export variables:
 
     ```bash
     export DOCKER_TAG=$(<"KYMA_VERSION" cat | tr -d " \t\n")
     export ARTIFACTS="$GOPATH/src/github.com/kyma-incubator/marketplaces/google-cloud/out"
     ```
 
-2. Build manifest:
+2. Build the manifest:
 
     ```bash
     make -C google-cloud/ manifest-build
     ```
 
-3. Run test:
+3. Run the test:
 
     ```bash
     ./.ci/scripts/test-GC-manifest.sh
