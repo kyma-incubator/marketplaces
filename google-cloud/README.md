@@ -62,6 +62,8 @@ To install the application manually on a Google Kubernetes Engine cluster, follo
 
 ### Run the integration test manually
 
+Follow the steps to run the integration pipeline for the repository.
+
 1. Export variable:
 
     ```bash
