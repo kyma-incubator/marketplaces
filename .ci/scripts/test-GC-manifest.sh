@@ -31,7 +31,7 @@ source "${LIB_DIR}/kubernetes.sh"
 # shellcheck disable=SC1090
 source "${LIB_DIR}/host.sh"
 
-INSTALLATIONTIMEOUT=1500 #in secounds
+INSTALLATIONTIMEOUT=1500 #in seconds
 TIME_IN_SECONDS=$(date +%s)
 TIME_OF_FINISH=$(( INSTALLATIONTIMEOUT + TIME_IN_SECONDS ))
 
