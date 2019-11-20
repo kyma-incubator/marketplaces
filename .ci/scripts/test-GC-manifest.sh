@@ -84,7 +84,7 @@ function waitAndCount() {
     if [ "$(date +%s)" -gt "${TIME_OF_FINISH}" ]
     then
         log::error "Installation timeout"
-        exit 1
+        return 1
     fi
 }
 
@@ -120,7 +120,7 @@ function monitorInstallation(){
     log::info "Kyma status: ${STATE}"
 }
 
-function applyArtifacts(){
+function applyArtifacts() {
     kubectl apply -f "https://raw.githubusercontent.com/GoogleCloudPlatform/marketplace-k8s-app-tools/master/crd/app-crd.yaml"
     kubectl apply -f "${ARTIFACTS_DIR}"
 }
