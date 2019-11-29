@@ -1,6 +1,6 @@
 # Release process
 
-This document describes how to create a release if the `marketplaces` repository release before publishing it on a given Partner Portal, such as GCP Marketplace.
+This document describes how to create a release of the `marketplaces` repository release before publishing it on a given Partner Portal, such as GCP Marketplace.
 
 >**NOTE:** The release process is based on Git tags. Once a tag is created, the release process starts automatically.
 
@@ -46,6 +46,6 @@ Follow the steps to create a new release.
 
 7. Check if the [release notes](https://github.com/kyma-incubator/marketplaces/releases) on were published on GitHub.
 
-8. Publish the release on a given Partner Portal. This process differs depending on a the provider. 
+8. Publish the release on a given Partner Portal. This process differs depending on a the provider.
 
 >**NOTE:** Merge all further patches to the corresponding release branch and tag it accordingly.
