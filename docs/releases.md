@@ -16,36 +16,46 @@ Follow the steps to create a new release.
 
 1. Clone the `marketplaces` repository on your local machine.
 
-2. Check out the `master` branch with the latest changes:
+    ```bash
+    git clone git@github.com:kyma-incubator/marketplaces.git
+    ```
+
+2. Go to the `marketplaces` folder. If you cloned the repository before, make sure you are on the `master` branch:
 
     ```bash
     git checkout master
+    ```
+
+3. Pull put the latest changes:
+
+    ```bash
+    git fetch --all
     git pull
     ```
 
-3. Create a release branch:
+4. Create a release branch:
 
     ```bash
    git checkout -b release-1.1
    git push upstream release-1.1
    ```
 
-4. Create a tag with the proper release version:
+5. Create a tag with the proper release version:
 
     ```bash
     git tag 1.1.0
     ```
 
-5. Push the tag:
+6. Push the tag:
 
     ```bash
     git push upstream 1.1.0
     ```
 
-6. Monitor the status of the release job on the [Prow dashboard](https://status.build.kyma-project.io/?job=rel-marketplaces).
+7. Monitor the status of the release job on the [Prow dashboard](https://status.build.kyma-project.io/?job=rel-marketplaces).
 
-7. Check if the [release notes](https://github.com/kyma-incubator/marketplaces/releases) on were published on GitHub.
+8. Check if the [release notes](https://github.com/kyma-incubator/marketplaces/releases) on were published on GitHub.
 
-8. Publish the release on a given Partner Portal. This process differs depending on a the provider.
+9. Publish the release on a given Partner Portal. This process differs depending on a the provider.
 
->**NOTE:** Merge all further patches to the corresponding release branch and tag it accordingly.
+   >**NOTE:** Merge all further patches to the corresponding release branch and tag it accordingly.
