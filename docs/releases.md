@@ -1,12 +1,12 @@
 # Release process
 
-This document describes how to create a release of the `marketplaces` repository release before publishing it on a given Partner Portal, such as GCP Marketplace.
+This document describes how to create a release of the `marketplaces` repository before publishing it on a given Partner Portal, such as GCP Marketplace.
 
 >**NOTE:** The release process is based on Git tags. Once a tag is created, the release process starts automatically.
 
 ## Versioning
 
-Versioning of `marketplaces` should follow Kyma versions, so version 1.1.1 installs Kyma in version 1.1.1. Versions with a suffix generate pre-releases.
+Versioning of `marketplaces` should follow Kyma versions, so the release of `marketplaces` 1.1.1 installs Kyma in version 1.1.1. Versions with a suffix generate pre-releases.
 
 ## Create a release
 
@@ -26,7 +26,7 @@ Follow the steps to create a new release.
     git checkout master
     ```
 
-3. Pull put the latest changes:
+3. Fetch and pull the latest changes from the upstream master:
 
     ```bash
     git fetch --all
@@ -58,4 +58,4 @@ Follow the steps to create a new release.
 
 9. Publish the release on a given Partner Portal. This process differs depending on a the provider.
 
-   >**NOTE:** Merge all further patches to the corresponding release branch and tag it accordingly.
+>**NOTE:** Merge all further patches to the corresponding release branch and tag it accordingly.
