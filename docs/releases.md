@@ -54,7 +54,7 @@ Follow the steps to create a new release.
 
 7. Monitor the status of the release job on the [Prow dashboard](https://status.build.kyma-project.io/?job=rel-marketplaces).
 
-8. Check if the [release notes](https://github.com/kyma-incubator/marketplaces/releases) on were published on GitHub.
+8. Check if the [release notes](https://github.com/kyma-incubator/marketplaces/releases) were published on GitHub.
 
 9. Publish the release on a given Partner Portal. This process differs depending on a the provider.
 
