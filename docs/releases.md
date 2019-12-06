@@ -37,7 +37,7 @@ Follow the steps to create a new release.
 
     ```bash
    git checkout -b release-1.1
-   git push upstream release-1.1
+   git push origin release-1.1
    ```
 
 5. Create a tag with the proper release version:
@@ -49,7 +49,7 @@ Follow the steps to create a new release.
 6. Push the tag:
 
     ```bash
-    git push upstream 1.1.0
+    git push origin 1.1.0
     ```
 
 7. Monitor the status of the release job on the [Prow dashboard](https://status.build.kyma-project.io/?job=rel-marketplaces).
