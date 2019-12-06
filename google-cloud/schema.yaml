@@ -17,8 +17,8 @@ properties:
     type: string
     title: Cluster Admin Service Account
     description: >-
-      Name of a service account in the target namespace that
-      has cluster-admin permissions. This is needed for the installation of Kyma.
+      Name of a service account in the target Namespace that
+      has cluster-admin permissions. Required to install Kyma.
     x-google-marketplace:
       type: SERVICE_ACCOUNT
       serviceAccount:
