@@ -1,0 +1,5 @@
+apiVersion: v1alpha1
+appVersion: "0.1"
+description: A Helm chart for Kyma as a Gardener Addon
+name: gardener-addon
+version: 0.1.0
