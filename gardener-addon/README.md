@@ -44,3 +44,7 @@ To install the addon manually on a Gardener cluster, follow these steps:
     ```bash
     kubectl -n kyma-installer logs kyma-initializer-dns-XXX
     ```
+
+## Details
+
+For doing the steps of the job in a manual way, see the [manual install](manual-install.md) instructions.
