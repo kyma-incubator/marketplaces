@@ -22,6 +22,8 @@ spec:
       initContainers:
       - name: requirements
         image: {{ .Values.jobs.image | quote }}
+        resources:
+          {{- toYaml .Values.jobs.resources | nindent 10 }}
         env:
           - name: K8S_VERSION
             value: {{ .Values.requires.k8s.version | quote }}
@@ -34,6 +36,8 @@ spec:
 {{ .Files.Get "files/requirements.sh" | printf "%s" | indent 12 }}
       - name: wait-for-tiller
         image: {{ .Values.jobs.image | quote }}
+        resources:
+          {{- toYaml .Values.jobs.resources | nindent 10 }}
         env:
           - name: DELAY
             value: {{ .Values.jobs.delay | quote}}
@@ -44,6 +48,8 @@ spec:
 {{ .Files.Get "files/wait-for-tiller.sh" | printf "%s" | indent 12 }}
       - name: wait-for-certificate
         image: {{ .Values.jobs.image | quote }}
+        resources:
+          {{- toYaml .Values.jobs.resources | nindent 10 }}
         env:
           - name: DELAY
             value: {{ .Values.jobs.delay | quote }}
@@ -55,6 +61,8 @@ spec:
       containers:
       - name: installation
         image: {{ .Values.jobs.image | quote }}
+        resources:
+          {{- toYaml .Values.jobs.resources | nindent 10 }}
         env:
           - name: KYMA_VERSION
             value: {{ .Values.kyma.version | quote }}

@@ -2,6 +2,13 @@
 jobs:
   image: eu.gcr.io/kyma-project/test-infra/alpine-kubectl:v20190325-ff66a3a
   delay: 30
+  resources:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 50m
+      memory: 64Mi
 kyma:
   version: "1.8.0"
   subdomain: "kyma"

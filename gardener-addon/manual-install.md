@@ -1,4 +1,4 @@
-# Manual Guide to install Kyma on a Gardener Shoot
+# Manual Guide to install Kyma on a Gardener Shoot (without using the Addon)
 
 ## 1. Prerequisites:
 
@@ -37,7 +37,7 @@ spec:
   commonName: "*.$DOMAIN"
 EOF
 ```
-After the resource gets status `Ready` it will contain a spec.secretRef attribute referencing to the generated secret conatining the certificate and the private key 
+After the resource gets status `Ready` it will contain a `spec.secretRef` attribute referencing to the generated secret conatining the certificate and the private key 
 
 ```
 kubectl -n kyma-installer get certificate kyma-cert -o yaml

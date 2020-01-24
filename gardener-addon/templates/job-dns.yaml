@@ -22,6 +22,8 @@ spec:
       initContainers:
       - name: requirements
         image: {{ .Values.jobs.image | quote }}
+        resources:
+          {{- toYaml .Values.jobs.resources | nindent 10 }}
         env:
           - name: K8S_VERSION
             value: {{ .Values.requires.k8s.version | quote }}
@@ -34,6 +36,8 @@ spec:
 {{ .Files.Get "files/requirements.sh" | printf "%s" | indent 12 }}
       - name: wait-for-installation
         image: {{ .Values.jobs.image | quote }}
+        resources:
+          {{- toYaml .Values.jobs.resources | nindent 10 }}
         env:
           - name: DELAY
             value: {{ .Values.jobs.delay | quote}}
@@ -45,6 +49,8 @@ spec:
       containers:
       - name: dns
         image: {{ .Values.jobs.image | quote }}
+        resources:
+          {{- toYaml .Values.jobs.resources | nindent 10 }}
         env:
           - name: SUBDOMAIN
             value: {{ .Values.kyma.subdomain | quote}}
