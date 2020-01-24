@@ -24,7 +24,7 @@ if [ "${STATUS}" = "Ready" ]; then
     break
 else
     echo "Waiting for Certicate generation, status is ${STATUS}"
-    sleep ${DELAY}
+    sleep "${DELAY}"
 fi
 done
 
