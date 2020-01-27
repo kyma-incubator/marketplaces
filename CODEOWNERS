@@ -10,5 +10,8 @@
 # All .md files
 *.md @bszwarc @kazydek @klaudiagrz @mmitoraj @tomekpapiernik @majakurcius @alexandra-simeonova
 
+# The Kyma on Gardener Addon
+/gardener-addon/ @suleymanakbas91 @clebs @a-thaler @lilitgh @hisarbalik
+
 # The documentation directory
 /docs/ @bszwarc @kazydek @klaudiagrz @mmitoraj @tomekpapiernik @majakurcius @alexandra-simeonova
