@@ -20,7 +20,6 @@ spec:
 export DOMAIN="myCluster.myProject.shoot.canary.k8s-hana.ondemand.com"
 ```
 
-## 2. Deploy the [`Shoot-Cert-Service` extension](https://gardener.cloud/050-tutorials/content/howto/gardener_certificate_management/#extension-installation) to be able to generate the certificate. 
 3.  Create the installer Namespace for Kyma and add a new Certificate resource:
 
 ```
