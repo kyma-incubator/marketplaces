@@ -1,10 +1,10 @@
-# Kyma Gardener Addon
+# Kyma Add-On for Gardener
 
 ## Overview
 
 This project provides a helm chart to be used as Addon for [Gardener](https://gardener.cloud)
 
-It will install a set of Kubernetes Jobs installing and starting the Kyma-Installer.
+The chart installs a set of Kubernetes Jobs installing and starting the Kyma Installer.
 
 ## Prerequisites
 
@@ -14,15 +14,15 @@ Use the following tools to set up the project:
 
 ## Usage
 
-To install the addon manually on a Gardener cluster, follow these steps:
+To install the Kyma Add-On manually on a Gardener cluster, follow these steps:
 
-1. Render helm chart:
+1. Render the Helm chart:
 
     ```bash
     helm template . > output.yaml
     ```
 
-2. Apply the kubernetes resources:
+2. Apply Kubernetes resources:
 
     ```bash
     kubectl apply -f output.yaml
@@ -47,4 +47,4 @@ To install the addon manually on a Gardener cluster, follow these steps:
 
 ## Details
 
-For doing the steps of the job in a manual way, see the [manual install](manual-install.md) instructions.
+If you want to execute the job manually, see the [manual installation](manual-install.md) instructions.
