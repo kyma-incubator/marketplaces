@@ -82,7 +82,8 @@ while true; do \
 done
 ```
 
-10. Create the DNS entry using the [`shoot-dns-service` extension](https://gardener.cloud/050-tutorials/content/howto/gardener_dns_management/#configuration). Annotate the `istio-ingressgateway` service with wildcard DNS name: 
+10. Create the DNS entry using the [`shoot-dns-service` extension](https://gardener.cloud/050-tutorials/content/howto/gardener_dns_management/#configuration).
+Annotate the `istio-ingressgateway` service with wildcard DNS name: 
 
 ```
 kubectl -n istio-system annotate service istio-ingressgateway dns.gardener.cloud/class='garden' dns.gardener.cloud/dnsnames='*.'$DOMAIN''
