@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project provides a helm chart to be used as Addon for [Gardener](https://gardener.cloud)
+This project provides a Helm chart you can use as an Add-On for [Gardener](https://gardener.cloud).
 
 The chart installs a set of Kubernetes Jobs installing and starting the Kyma Installer.
 
