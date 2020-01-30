@@ -7,11 +7,13 @@
 # These are the default owners for the whole content of the `marketplaces` repository. The default owners are automatically added as reviewers when you open a pull request, unless different owners are specified in the file.
 * @aerfio @magicmatatjahu @michal-hudy @m00g3n
 
-# All .md files
-*.md @bszwarc @kazydek @klaudiagrz @mmitoraj @tomekpapiernik @majakurcius @alexandra-simeonova
-
 # The Kyma on Gardener Addon
 /gardener-addon/ @suleymanakbas91 @clebs @a-thaler @lilitgh @hisarbalik
+
+# Don't add new patterns under this line
+
+# All .md files
+*.md @bszwarc @kazydek @klaudiagrz @mmitoraj @tomekpapiernik @majakurcius @alexandra-simeonova
 
 # The documentation directory
 /docs/ @bszwarc @kazydek @klaudiagrz @mmitoraj @tomekpapiernik @majakurcius @alexandra-simeonova
