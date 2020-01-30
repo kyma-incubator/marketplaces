@@ -40,7 +40,7 @@ To install the Kyma Add-On manually on a Gardener cluster, follow these steps:
     kubectl -n kyma-installer logs kyma-initializer-dns-XXX -c wait-for-installation -f
     ```
 
-5. Check for final completion
+5. Check for completion:
     ```bash
     kubectl -n kyma-installer logs kyma-initializer-dns-XXX
     ```
