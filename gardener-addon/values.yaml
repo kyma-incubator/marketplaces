@@ -10,10 +10,10 @@ jobs:
       cpu: 50m
       memory: 64Mi
 kyma:
-  version: "1.8.0"
+  version: "master"
   subdomain: "kyma"
 requires:
   k8s:
-    version: "1.15"
+    version: "1.16"
   gardener:
     extensions: "shoot-cert-service,shoot-dns-service"
