@@ -1,4 +1,4 @@
-FROM eu.gcr.io/kyma-project/test-infra/alpine-kubectl:v20190325-ff66a3a
+FROM eu.gcr.io/kyma-project/test-infra/alpine-kubectl:v20200121-4f3202bd
 
 ARG KYMA_VERSION
 ARG INITIALIZER_VERSION
