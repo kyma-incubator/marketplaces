@@ -5,3 +5,5 @@ do
     echo "---> Tiller is not ready yet"
     sleep "${DELAY}"
 done
+
+echo "---> Tiller is ready"
