@@ -10,7 +10,7 @@ jobs:
       cpu: 50m
       memory: 64Mi
 kyma:
-  version: "master"
+  version: "1.10.0"
   subdomain: "kyma"
 requires:
   k8s:
