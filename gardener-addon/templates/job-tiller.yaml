@@ -2,10 +2,11 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: kyma-initializer-tiller
+  name: kyma-initializer-tiller-{{ .Values.kyma.version }}
   namespace: kyma-installer
   labels:
     app: kyma-initializer
+    version: {{ .Values.kyma.version }}
 spec:
   backoffLimit: 3
   template:
