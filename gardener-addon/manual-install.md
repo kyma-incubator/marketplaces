@@ -3,8 +3,8 @@
 ## Prerequisites
 
 Enable the following extensions for the shoot cluster:
-* [`shoot-dns-service`](https://gardener.cloud/050-tutorials/content/howto/gardener_dns_management/#configuration) extension which adds the DNSEntry CRD 
-* [`shoot-cert-service`](https://gardener.cloud/050-tutorials/content/howto/gardener_certificate_management/#extension-installation) extension which adds the Certificate CRD
+* [`shoot-dns-service`](https://gardener.cloud/documentation/050-tutorials/content/howto/gardener_dns_management/#configuration) extension which adds the DNSEntry CRD 
+* [`shoot-cert-service`](https://gardener.cloud/documentation/050-tutorials/content/howto/gardener_certificate_management/#extension-installation) extension which adds the Certificate CRD
   
 ```
 spec:
